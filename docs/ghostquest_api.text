@@ -1,0 +1,42 @@
+API ROUTES (GHOST QUEST)
+
+GENERATE CHARACTERS
+route: /ghostquest/gen_char
+parameters: {
+	"username": "user3",
+	"amount": 1,
+	"battleLimit": 10
+}
+
+ADD LIFE
+route: /ghostquest/add_life
+parameters: {
+	"username": "user3",
+	"ghost_id": "52ea1bfc1b4ad39f89c398cf3852a521"
+}
+
+route: /ghostquest/get_table
+parameters: {
+	"json": true,
+	"code": "ghostquest",
+	"scope": "ghostquest",
+	"table": "users",
+	"limit": 99,
+	"reverse": false,
+	"show_payer": false
+}
+
+ELIMINATE
+route: /ghostquest/eliminate
+parameters: {
+	"username": "user3",
+	"ghost_id": "a03557a52f5586a930eb898a1ea8022"
+}
+
+BATTLE RESULT
+route: /ghostquest/battle_result
+parameters: {
+	"gameid": "ec94f6b3-a9a0-4d0f-ab99-649af23ab328",
+	"winner": { "first": "f756f6bfddf724a4919bb1f82d2fa332", "second": "user1"},
+	"loser": { "first": "88ef9b0ddb53535282871125a9b38c21", "second": "user2"}
+}
