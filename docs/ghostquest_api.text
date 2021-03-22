@@ -17,13 +17,17 @@ parameters: {
 
 route: /ghostquest/get_table
 parameters: {
-	"json": true,
-	"code": "ghostquest",
-	"scope": "ghostquest",
-	"table": "users",
-	"limit": 99,
-	"reverse": false,
-	"show_payer": false
+ 	"code" -> req.code,
+	"table" -> req.table,
+	"scope" -> req.scope,
+	"index_position" -> req.index_position.getOrElse(null),
+	"key_type" -> req.key_type.getOrElse(null),
+	"encode_type" -> req.encode_type.getOrElse(null),
+	"upper_bound" -> req.upper_bound.getOrElse(null),
+	"lower_bound" -> req.lower_bound.getOrElse(null),
+	"json" -> true, // add this to format result into JSON
+	"limit" -> 10, // set max result to 250 active users per request
+	"show_payer" -> false
 }
 
 ELIMINATE

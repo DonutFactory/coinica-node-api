@@ -18,25 +18,43 @@ const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), te
 
 exports.GET_TABLE_ROWS = async(req, res) => {
   const {
-    json,
     code,
-    scope,
     table,
+    scope,
+    index_position,
+    key_type,
+    encode_type,
+    upper_bound,
+    lower_bound,
+    json,
     limit,
-    reverse,
-    show_payer,
+    show_payer
   } = req.body
 
-  if (!arrayHasUndefined([json, code, scope, table, limit, reverse, show_payer])) {
+  if (!arrayHasUndefined([code,
+                          table,
+                          scope,
+                          index_position,
+                          key_type,
+                          encode_type,
+                          upper_bound,
+                          lower_bound,
+                          json,
+                          limit,
+                         show_payer])) {
     try {
       const tableResponse = await rpc.get_table_rows({
-        json,        // Get the response as json
-        code,        // Contract that we target
-        scope,       // Account that owns the data
-        table,       // Table name
-        limit,       // Maximum number of rows that we want to get
-        reverse,     // Optional: Get reversed data
-        show_payer   // Optional: Show ram payer
+        code,
+        table,
+        scope,
+        index_position,
+        key_type,
+        encode_type,
+        upper_bound,
+        lower_bound,
+        json,
+        limit,
+        show_payer
       });
 
       res.status(200)
@@ -62,7 +80,7 @@ exports.GET_TABLE_ROWS = async(req, res) => {
       code: 400,
       error: true,
       data: null,
-      message: 'Parameters required: json, code, scope, table, limit, reverse, show_payer'
+      message: 'Parameters required: code,table,scope,index_position,key_type,encode_type,upper_bound,lower_bound,json,limit,show_payer'
     })
   }
 }
@@ -206,7 +224,7 @@ exports.ELIMINATE = async(req, res) => {
       res.send({
         code: 500,
         error: true,
-        data: null,
+        data: err,
         message: 'Internal Server Error'
       })
     }
@@ -243,7 +261,7 @@ exports.BATTLE_RESULT = async(req, res) => {
         blocksBehind: 3,
         expireSeconds: 30,
       });
-  
+
       res.status(200)
       res.send({
         code: 200,
