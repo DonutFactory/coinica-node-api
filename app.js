@@ -12,9 +12,11 @@ app.use(bodyParser.urlencoded({
 // Routes
 const routes = require('./routes/index');
 const ghostquests = require('./routes/ghostquest');
+const multiCurrencyV1 = require('./routes/multi-currency/v1');
 
 app.use('/', routes);
 app.use('/ghostquest', ghostquests);
+app.use('/multi-currency/v1', multiCurrencyV1);
 
 app.listen(port, () => {
   console.log(`Server is started on port ${port}...`)

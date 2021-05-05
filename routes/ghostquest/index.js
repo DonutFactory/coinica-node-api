@@ -8,7 +8,7 @@ const {
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => res.send('EGSNET GHOSTQUEST ROUTES'))
+router.get('/', (_, res) => res.send('EGSNET GHOSTQUEST ROUTES'))
 router.post('/gen_char', GEN_CHAR)
 router.post('/add_life', ADD_LIFE)
 router.post('/get_table', GET_TABLE_ROWS)
