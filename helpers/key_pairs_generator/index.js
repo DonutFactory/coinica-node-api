@@ -1,30 +1,19 @@
 const bitcoin_generator = require("./bitcoin_generator");
 const ethereum_generator = require("./ethereum_generator");
-const usdc_generator = require("./usdc_generator");
 
 module.exports = (coin) => {
-  if (coin === 'btc') {
+  if (coin === 'BTC') {
     const { address, privateKey, publicKey } = bitcoin_generator()
     return {
-      currency: "BTC",
+      currency: coin,
       address,
       privateKey,
       publicKey
     };
-  } else if (coin === 'eth') {
+  } else if (coin === 'ETH' || coin === 'USDC') {
     const { address, privateKey, publicKey } = ethereum_generator()
     return {
-      currency: "ETH",
-      address,
-      privateKey,
-      publicKey
-    };
-  } else if (coin === 'usdt') {
-    //
-  } else if (coin === 'usdc') {
-    const { address, privateKey, publicKey } = usdc_generator()
-    return {
-      currency: "USDC",
+      currency: coin,
       address,
       privateKey,
       publicKey
