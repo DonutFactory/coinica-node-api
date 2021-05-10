@@ -22,18 +22,20 @@ Returns list of all supported deposit coins.
   ```
 
 * **Success Response:**
-  ```[
-    {
-      "symbol": "bnb",
-      "name": "Binance Coin",
-      "isActive": true
-    },
-    {
-      "symbol": "xrp",
-      "name": "Ripple",
-      "isActive": true
-    },
-    {...},
-    {...},
-    +...
-  ]```
+  ```json
+    [
+      {
+        "symbol": "bnb",
+        "name": "Binance Coin",
+        "isActive": true
+      },
+      {
+        "symbol": "xrp",
+        "name": "Ripple",
+        "isActive": true
+      },
+      {...},
+      {...},
+      +...
+    ]
+  ```
