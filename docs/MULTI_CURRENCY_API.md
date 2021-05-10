@@ -1,3 +1,7 @@
+# API ROUTES FOR MULTI-CURRENCY (COINSWITCH)
+<br />
+<br />
+
 **GET COINS**
 ----
 Returns list of all supported deposit coins.
