@@ -240,21 +240,21 @@ Create `ORDER` from `OFFER` api.
 *  **BODY Params** <br />
 	```text
 	  {
-      transaction: {
-          depositCoin: <string, required> [`depositCoin` from `GENERATE OFFER` api response]
-          destinationCoin: <string, required> [`destinationCoin` from `GENERATE OFFER` api response]
-          depositCoinAmount: <number, required> [`depositCoinAmount` from `GENERATE OFFER` api response]
-          destinationAddress: {
-            address: <string, required>
-            tag: <string, optional>
-          },
-          refundAddress: {
-            address: <string, required>
-            tag: <string, optional>
-          },
-          userReferenceId: <string, required>
-          offerReferenceId": <string, required> [`offerReferenceId` from `GENERATE OFFER` api response]
-      }
+	      transaction: {
+		  depositCoin: <string, required> [`depositCoin` from `GENERATE OFFER` api response]
+		  destinationCoin: <string, required> [`destinationCoin` from `GENERATE OFFER` api response]
+		  depositCoinAmount: <number, required> [`depositCoinAmount` from `GENERATE OFFER` api response]
+		  destinationAddress: {
+		    address: <string, required>
+		    tag: <string, optional>
+		  },
+		  refundAddress: {
+		    address: <string, required>
+		    tag: <string, optional>
+		  },
+		  userReferenceId: <string, required>
+		  offerReferenceId": <string, required> [`offerReferenceId` from `GENERATE OFFER` api response]
+	      }
 	  }
    ```
 
@@ -310,7 +310,7 @@ Returns status for that specific `orderId` from `CREATE ORDER` api.
 *  **BODY Params** <br />
 	```text
 	  {
-        orderId: <string> [`orderId` from `CREATE ORDER` api response]
+        	orderId: <string> [`orderId` from `CREATE ORDER` api response]
 	  }
    ```
 
@@ -366,9 +366,9 @@ Returns list of client orders in paginated format.
 *  **BODY Params** <br />
 	```text
 	  {
-        start: <int, optional, default = 0> 
-        count: <int, optional, default = 25> 
-        userRefId: <string, optional> (Optional parameter to filter orders for that userReferenceId)
+		start: <int, optional, default = 0> 
+		count: <int, optional, default = 25> 
+		userRefId: <string, optional> (Optional parameter to filter orders for that userReferenceId)
 	  }
    ```
 
