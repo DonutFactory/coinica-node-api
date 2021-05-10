@@ -1,4 +1,6 @@
 # API ROUTES (GHOST QUEST)
+<br />
+<br />
 
 **GENERATE CHARACTERS**
 ----
