@@ -1,35 +1,15 @@
-** GET COINS **
+**GET COINS**
 ----
 Returns list of all supported deposit coins.
 
-* **URL**
+* **URL** <br />
   /multi-currency/v1/coins
 
-* **Method:**
+* **Method:** <br />
   `POST`
 
-*  **BODY Params**
-  NONE
-
-* **Success Response:**
-  * **Code:** 200 <br />
-    **Content:** `
-      [
-        {
-          "symbol": "bnb",
-          "name": "Binance Coin",
-          "isActive": true
-        },
-        {
-          "symbol": "xrp",
-          "name": "Ripple",
-          "isActive": true
-        },
-        {...},
-        {...},
-        +...
-      ]
-    `
+*  **BODY Params** <br />
+  `{}`
 
 * **Sample Call:**
   ```javascript
@@ -40,3 +20,20 @@ Returns list of all supported deposit coins.
       data: {}
     });
   ```
+
+* **Success Response:**
+  `[
+    {
+      "symbol": "bnb",
+      "name": "Binance Coin",
+      "isActive": true
+    },
+    {
+      "symbol": "xrp",
+      "name": "Ripple",
+      "isActive": true
+    },
+    {...},
+    {...},
+    +...
+  ]`
