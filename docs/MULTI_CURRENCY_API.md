@@ -179,7 +179,7 @@ Get max and min limit of deposit coin allowed by `ORDER` or `OFFER` api.
 ----
 View offers available for the currency pair. \
 DepositAmount must be inside the limit specified by `LIMITS` api. \
-OfferReferenceId is required to create order and is valid for 10 minutes.
+OfferReferenceId is required to create `ORDER` and is valid for 10 minutes.
 
 * **URL** <br />
   `/multi-currency/v1/generate-offer`
@@ -237,19 +237,19 @@ Create `ORDER` from `OFFER` api.
 	```text
 	  {
       transaction: {
-        depositCoin: <string, required> [`depositCoin` from `GENERATE OFFER` api response]
-        destinationCoin: <string, required> [`destinationCoin` from `GENERATE OFFER` api response]
-        depositCoinAmount: <number, required> [`depositCoinAmount` from `GENERATE OFFER` api response]
-        destinationAddress: {
-          address: <string, required>
-          tag: <string, optional>
-        },
-        refundAddress: {
-          address: <string, required>
-          tag: <string, optional>
-        },
-        userReferenceId: <string, required>
-        offerReferenceId": <string, required> [`offerReferenceId` from `GENERATE OFFER` api response]
+          depositCoin: <string, required> [`depositCoin` from `GENERATE OFFER` api response]
+          destinationCoin: <string, required> [`destinationCoin` from `GENERATE OFFER` api response]
+          depositCoinAmount: <number, required> [`depositCoinAmount` from `GENERATE OFFER` api response]
+          destinationAddress: {
+            address: <string, required>
+            tag: <string, optional>
+          },
+          refundAddress: {
+            address: <string, required>
+            tag: <string, optional>
+          },
+          userReferenceId: <string, required>
+          offerReferenceId": <string, required> [`offerReferenceId` from `GENERATE OFFER` api response]
       }
 	  }
    ```
@@ -295,7 +295,7 @@ Create `ORDER` from `OFFER` api.
 
 **ORDER STATUS**
 ----
-Returns status for that specific `order id`.
+Returns status for that specific `orderId` from `CREATE ORDER` api.
 
 * **URL** <br />
   `/multi-currency/v1/order`
@@ -306,7 +306,7 @@ Returns status for that specific `order id`.
 *  **BODY Params** <br />
 	```text
 	  {
-      orderId: <string> [`orderId` from `CREATE ORDER` api response]
+        orderId: <string> [`orderId` from `CREATE ORDER` api response]
 	  }
    ```
 
@@ -362,9 +362,9 @@ Returns list of client orders in paginated format.
 *  **BODY Params** <br />
 	```text
 	  {
-      start: <int, optional, default = 0> 
-      count: <int, optional, default = 25> 
-      userRefId: <string, optional> (Optional parameter to filter orders for that userReferenceId)
+        start: <int, optional, default = 0> 
+        count: <int, optional, default = 25> 
+        userRefId: <string, optional> (Optional parameter to filter orders for that userReferenceId)
 	  }
    ```
 
