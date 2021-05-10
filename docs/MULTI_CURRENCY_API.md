@@ -22,7 +22,7 @@ Returns list of all supported deposit coins.
   ```
 
 * **Success Response:**
-  `[
+  ``[
     {
       "symbol": "bnb",
       "name": "Binance Coin",
@@ -36,4 +36,4 @@ Returns list of all supported deposit coins.
     {...},
     {...},
     +...
-  ]`
+  ]``
