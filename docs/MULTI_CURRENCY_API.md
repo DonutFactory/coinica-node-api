@@ -51,7 +51,7 @@ Returns list of all supported destination coins for the coin symbol.
   `POST`
 
 *  **BODY Params** <br />
-    ```json
+    ```text
 	  {
 	    coin_symbol: <symbol from get `GET COINS` api response>
 	  }
