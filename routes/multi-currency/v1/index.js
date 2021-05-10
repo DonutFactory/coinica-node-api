@@ -12,11 +12,11 @@ const generate_keypairs = require("../../../controllers/multi-currency/v1/genera
 
 // COINSWITCH API
 router.get('/', (_, res) => res.send('EGS MULTI CURRENCY API V1'));
-router.get('/coins', coins);
-router.get('/supported-pairs', supported_pairs);
-router.get('/supported-deposit-coins', supported_deposit_coins);
-router.get('/order', order_status);
-router.get('/orders', orders_list);
+router.post('/coins', coins);
+router.post('/supported-pairs', supported_pairs);
+router.post('/supported-deposit-coins', supported_deposit_coins);
+router.post('/order', order_status);
+router.post('/orders', orders_list);
 router.post('/exchange-limit', limit);
 router.post('/generate-offer', genenrate_offer);
 router.post('/make-order', make_order);
