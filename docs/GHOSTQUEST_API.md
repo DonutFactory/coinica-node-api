@@ -14,8 +14,8 @@ Generates character for ghost quest
     ```text
 	  {
 	    "username" "user3",
-      "amount": 1,
-      "battleLimit": 10
+	    "amount": 1,
+	    "battleLimit": 10
 	  }
    ```
 
@@ -57,16 +57,16 @@ Returns table data from smart contract
     ```text
 	  {
 	    "code" -> req.code,
-      "table" -> req.table,
-      "scope" -> req.scope,
-      "index_position" -> req.index_position.getOrElse(null),
-      "key_type" -> req.key_type.getOrElse(null),
-      "encode_type" -> req.encode_type.getOrElse(null),
-      "upper_bound" -> req.upper_bound.getOrElse(null),
-      "lower_bound" -> req.lower_bound.getOrElse(null),
-      "json" -> true, // add this to format result into JSON
-      "limit" -> 10, // set max result to 250 active users per request
-      "show_payer" -> false
+	    "table" -> req.table,
+	    "scope" -> req.scope,
+	    "index_position" -> req.index_position.getOrElse(null),
+	    "key_type" -> req.key_type.getOrElse(null),
+	    "encode_type" -> req.encode_type.getOrElse(null),
+	    "upper_bound" -> req.upper_bound.getOrElse(null),
+	    "lower_bound" -> req.lower_bound.getOrElse(null),
+	    "json" -> true, // add this to format result into JSON
+	    "limit" -> 10, // set max result to 250 active users per request
+	    "show_payer" -> false
 	  }
    ```
 
@@ -108,8 +108,8 @@ Eliminates ghost (remove ghost from IN-BATTLE category)
     ```text
 	  {
 	    "gameid": "ec94f6b3-a9a0-4d0f-ab99-649af23ab328",
-      "winner": { "first": "f756f6bfddf724a4919bb1f82d2fa332", "second": "user1"},
-      "loser": { "first": "88ef9b0ddb53535282871125a9b38c21", "second": "user2"}
+	    "winner": { "first": "f756f6bfddf724a4919bb1f82d2fa332", "second": "user1"},
+	    "loser": { "first": "88ef9b0ddb53535282871125a9b38c21", "second": "user2"}
 	  }
    ```
 
