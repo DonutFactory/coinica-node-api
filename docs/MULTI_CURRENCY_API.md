@@ -97,7 +97,7 @@ Returns list of all supported deposit coins for the coin symbol.
   `POST`
 
 *  **BODY Params** <br />
-  	```json
+  	```text
 	  {
 	    coin_symbol: <symbol from get `GET COINS` api response>
 	  }
@@ -143,7 +143,7 @@ Get max and min limit of deposit coin allowed by `ORDER` or `OFFER` api.
   `POST`
 
 *  **BODY Params** <br />
-	```json
+	```text
 	  {
 	    depositCoin: <symbol from get `GET COINS` api response>
 	    destinationCoin: <symbol from get `GET COINS` api response>
@@ -157,8 +157,8 @@ Get max and min limit of deposit coin allowed by `ORDER` or `OFFER` api.
       method : "post",
       headers,
       data: {
-			depositCoin: "btc",
-			destinationCoin: "eth"
+        depositCoin: "btc",
+        destinationCoin: "eth"
       }
     });
   ```
@@ -174,3 +174,52 @@ Get max and min limit of deposit coin allowed by `ORDER` or `OFFER` api.
   ```
 <br />
 <br />
+
+**GENERATE OFFER**
+----
+View offers available for the currency pair. \
+DepositAmount must be inside the limit specified by `LIMITS` api. \
+OfferReferenceId is required to create order and is valid for 10 minutes.
+
+* **URL** <br />
+  `/multi-currency/v1/generate-offer`
+
+* **Method:** <br />
+  `POST`
+
+*  **BODY Params** <br />
+	```text
+	  {
+      depositCoin: <`depositCoin` from get `LIMITS` api response>,
+      destinationCoin: <`destinationCoin` from get `LIMITS` api response>
+      depositCoinAmount: <range value from `depositCoinMinAmount` & `depositCoinMaxAmount` data from `LIMITS` api response>
+	  }
+   ```
+
+* **Sample Call:**
+  ```javascript
+    axios({
+      url: BASE_URL + "/multi-currency/v1/generate-offer`",
+      method : "post",
+      headers,
+      data: {
+        depositCoin: "btc",
+        destinationCoin: "eth",
+        depositCoinAmount: 0.0849
+      }
+    });
+  ```
+
+* **Success Response:**
+  ```json
+    {
+      depositCoin: "btc",
+      destinationCoin: "eth",
+      depositCoinAmount: 0.0849,
+      destinationCoinAmount: 1.18331,
+      offerReferenceId: "V30FYMUHC4UQ"
+    }
+  ```
+<br />
+<br />
+
