@@ -12,6 +12,8 @@
     "bitcoinjs-lib": "^5.2.0",
     "body-parser": "^1.19.0",
     "chalk": "^4.1.0",
+    "coinbase": "^2.0.8",
+    "coinbase-pro": "^0.9.0",
     "dotenv": "^8.2.0",
     "eosjs": "^21.0.3",
     "ethereumjs-wallet": "^1.0.1",
