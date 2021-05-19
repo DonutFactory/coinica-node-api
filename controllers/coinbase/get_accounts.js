@@ -7,9 +7,8 @@ const get_accounts = async(req, res) => {
     coinbaseClient.getAccounts({}, function(err, accounts) {
       if (!err) {
         res.status(200).json(successHandler({ data: accounts }))
-        console.log({ accounts })
       } else {
-        res.status(400).json(errorHandler({ status: 400, error: true, message: 'Error getting accounts' }))
+        res.status(400).json(errorHandler({ status: 400, error: true, message: err.message || 'Error getting accounts' }))
       }
     });
   } catch (err) {
