@@ -10,7 +10,7 @@ var api = etherscan.init(API_KEY);
 exports.getTransactionHashStatus = async (req, res) => {
   try {
     const { txhash } = req.body;
-    const response = await api.transaction.getstatus(txhash);
+    const response = await api.proxy.eth_getTransactionByHash(txhash);
 
     return res.json(response);
   } catch (error) {
