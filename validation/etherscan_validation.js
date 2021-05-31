@@ -1,6 +1,7 @@
 var Joi = require("joi");
 
 var tx = Joi.object({
+  username: Joi.string().required(),
   txhash: Joi.string().required(),
 });
 
