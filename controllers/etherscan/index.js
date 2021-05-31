@@ -5,7 +5,7 @@ const IS_DEV = process.env.NODE_ENV !== "production";
 const API_KEY = process.env.ETHERSCAN_API_KEY;
 const CHAIN = IS_DEV ? process.env.ETHERSCAN_TEST_NET : "";
 
-var api = etherscan.init(API_KEY);
+var api = etherscan.init(API_KEY, CHAIN);
 
 exports.getTransactionHashStatus = async (req, res) => {
   try {
