@@ -1,12 +1,13 @@
-var Joi = require("joi");
+const Joi = require("joi");
 
-var tx = Joi.object({
+const txSchema = Joi.object({
   username: Joi.string().required(),
   txhash: Joi.string().required(),
+  currency: Joi.string().required(),
 });
 
 exports.txHash = (req, res, next) => {
-  const { error } = tx.validate(req.body);
+  const { error } = txSchema.validate(req.body);
 
   if (error) {
     return res.status(400).json({
