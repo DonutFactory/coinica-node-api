@@ -15,7 +15,6 @@
     "chalk": "^4.1.0",
     "dotenv": "^8.2.0",
     "eosjs": "^21.0.3",
-    "ethereum-input-data-decoder": "^0.3.2",
     "ethereumjs-tx": "^2.1.2",
     "ethereumjs-wallet": "^1.0.1",
     "etherscan-api": "^10.0.5",

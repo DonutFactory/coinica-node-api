@@ -16,15 +16,15 @@ const broadcast = (clients, message) => {
 exports.getTransactionByHash = async (req, res) => {
   try {
     const {
-      body: { txhash, username, currency },
+      body: { txhash, username },
       app,
     } = req;
-    const response = await eth_getTransactionByHash({ txhash, currency });
+    const response = await eth_getTransactionByHash(txhash);
 
     //broadcast the response to connected client
     broadcast(app.locals.clients, JSON.stringify(response));
 
-    return res.json({ username, currency, ...response });
+    return res.json({ username, ...response });
   } catch (error) {
     console.log(chalk.red(error));
 

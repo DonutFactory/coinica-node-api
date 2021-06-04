@@ -1,55 +1,39 @@
 const etherscan = require("etherscan-api");
-const InputDataDecoder = require("ethereum-input-data-decoder");
-const usdc_abi = require("../config/usdc_abi.json");
-const web3 = require("web3");
-const web3Utils = web3.utils;
+const Web3 = require("web3");
+const { fromWei, toBN } = Web3.utils;
 
-const IS_DEV = process.env.NODE_ENV !== "production";
+const IS_DEV = process.env.NODE_ENV === "development";
 const API_KEY = process.env.ETHERSCAN_API_KEY;
 const CHAIN = IS_DEV ? process.env.ETHERSCAN_TEST_NET : "";
 
-const api = etherscan.init(API_KEY);
-const decoder_usdc = new InputDataDecoder(usdc_abi);
+const api = etherscan.init(API_KEY, CHAIN);
 
-exports.eth_getTransactionByHash = async ({ txhash, currency }) => {
+const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
+const INFURA_PRIVATE_KEY = process.env.INFURA_PROJECT_KEY;
+const NETWORK_CHAIN = IS_DEV
+  ? process.env.ROPSTEN_TESTNET
+  : process.env.ETH_MAINNET;
+
+const web3 = new Web3(
+  new Web3.providers.HttpProvider(
+    `https://:${INFURA_PRIVATE_KEY}@${NETWORK_CHAIN}.infura.io/v3/${INFURA_PROJECT_ID}`
+  )
+);
+
+exports.eth_getTransactionByHash = async (txhash) => {
   try {
-    let decodedData = {};
     const response = await api.proxy.eth_getTransactionByHash(txhash);
 
     if (!response.result) {
       return response;
     }
 
-    // Note: can decode only if transaction is transfer/deposit
-    switch (currency.toUpperCase()) {
-      case "USDC":
-        decodedInputData = decoder_usdc.decodeData(response.result.input);
+    etherValue = fromWei(toBN(response.result.value).toString());
 
-        // Format token value, that support 6 decimal. Ex: usdc
-        // https://web3js.readthedocs.io/en/v1.3.4/web3-utils.html#fromwei
-        tokenValue = web3Utils.fromWei(
-          web3Utils.BN(decodedInputData.inputs[1]).toString(),
-          "mwei"
-        );
-
-        decodedData = {
-          to: "0x" + decodedInputData.inputs[0],
-          value: tokenValue,
-        };
-        break;
-
-      case "ETH":
-        etherValue = web3Utils.fromWei(
-          web3Utils.toBN(response.result.value).toString(),
-          "ether"
-        );
-
-        decodedData = {
-          to: response.result.to,
-          value: etherValue,
-        };
-        break;
-    }
+    decodedData = {
+      to: response.result.to,
+      value: etherValue,
+    };
 
     return {
       ...response,
