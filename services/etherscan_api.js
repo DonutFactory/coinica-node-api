@@ -8,18 +8,6 @@ const CHAIN = IS_DEV ? process.env.ETHERSCAN_TEST_NET : "";
 
 const api = etherscan.init(API_KEY, CHAIN);
 
-const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
-const INFURA_PRIVATE_KEY = process.env.INFURA_PROJECT_KEY;
-const NETWORK_CHAIN = IS_DEV
-  ? process.env.ROPSTEN_TESTNET
-  : process.env.ETH_MAINNET;
-
-const web3 = new Web3(
-  new Web3.providers.HttpProvider(
-    `https://:${INFURA_PRIVATE_KEY}@${NETWORK_CHAIN}.infura.io/v3/${INFURA_PROJECT_ID}`
-  )
-);
-
 exports.eth_getTransactionByHash = async (txhash) => {
   try {
     const response = await api.proxy.eth_getTransactionByHash(txhash);
