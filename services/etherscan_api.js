@@ -6,7 +6,7 @@ const IS_DEV = process.env.NODE_ENV === "development";
 const API_KEY = process.env.ETHERSCAN_API_KEY;
 const CHAIN = IS_DEV ? process.env.ETHERSCAN_TEST_NET : "";
 
-const api = etherscan.init(API_KEY, CHAIN);
+const api = etherscan.init(API_KEY);
 
 const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
 const INFURA_PRIVATE_KEY = process.env.INFURA_PROJECT_KEY;
@@ -41,7 +41,7 @@ exports.eth_getTransactionByHash = async ({ txhash, currency }) => {
           "mwei"
         );
         decodedData = {
-          to: "0x" + decodedInputData[0],
+          to: decodedInputData[0],
           value: tokenValue,
         };
         break;
