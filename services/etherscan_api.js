@@ -1,6 +1,6 @@
 const etherscan = require("etherscan-api");
 const Web3 = require("web3");
-const { fromWei, toBN, BN } = Web3.utils;
+const { fromWei, toBN, BN, hexToNumber, toWei } = Web3.utils;
 
 const IS_DEV = process.env.NODE_ENV === "development";
 const API_KEY = process.env.ETHERSCAN_API_KEY;
@@ -28,9 +28,13 @@ exports.eth_getTransactionByHash = async ({ txhash, currency }) => {
       return response;
     }
 
+    const {
+      result: { input, blockNumber, gas, gasPrice, nonce },
+    } = response;
+
     switch (currency.toUpperCase()) {
       case "USDC":
-        const inputData = "0x" + response.result.input.slice(10);
+        const inputData = "0x" + input.slice(10);
         const decodedInputData = web3.eth.abi.decodeParameters(
           ["address", "uint256"],
           inputData
@@ -44,6 +48,7 @@ exports.eth_getTransactionByHash = async ({ txhash, currency }) => {
           to: decodedInputData[0],
           value: tokenValue,
         };
+
         break;
       case "ETH":
         const etherValue = fromWei(toBN(response.result.value).toString());
@@ -62,7 +67,13 @@ exports.eth_getTransactionByHash = async ({ txhash, currency }) => {
       ...response,
       result: {
         ...response.result,
-        decodedData,
+        decodedData: {
+          ...decodedData,
+          blockNumber: hexToNumber(blockNumber),
+          gas: hexToNumber(gas),
+          gasPrice: hexToNumber(gasPrice) / 1000000000,
+          nonce: hexToNumber(nonce),
+        },
       },
     };
   } catch (error) {
