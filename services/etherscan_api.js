@@ -31,6 +31,7 @@ exports.eth_getTransactionByHash = async ({ txhash, currency }) => {
     const {
       result: { input, blockNumber, gas, gasPrice, nonce },
     } = response;
+    let decodedData = { to: null, value: null };
 
     switch (currency.toUpperCase()) {
       case "USDC":
@@ -67,13 +68,12 @@ exports.eth_getTransactionByHash = async ({ txhash, currency }) => {
       ...response,
       result: {
         ...response.result,
-        decodedData: {
-          ...decodedData,
-          blockNumber: hexToNumber(blockNumber),
-          gas: hexToNumber(gas),
-          gasPrice: hexToNumber(gasPrice) / 1000000000,
-          nonce: hexToNumber(nonce),
-        },
+        blockNumber: hexToNumber(blockNumber),
+        gas: hexToNumber(gas),
+        gasPrice: hexToNumber(gasPrice) / 1000000000,
+        nonce: hexToNumber(nonce),
+        to: decodedData.to,
+        value: decodedData.value,
       },
     };
   } catch (error) {
