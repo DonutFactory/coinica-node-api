@@ -9,7 +9,7 @@ const validate = require("../../validation/etherscan_validation");
 
 router.get("/", (_, res) => res.send("EGS ETHERSCAN API"));
 
-router.get("/txhash-status", validate.txHash, getTransactionByHash);
+router.get("/transaction/details", validate.txHash, getTransactionByHash);
 router.get("/withdraw-eth", withdrawEther);
 
 module.exports = router;

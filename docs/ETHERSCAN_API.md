@@ -3,12 +3,12 @@
 <br />
 <br />
 
-## **Get transaction hash status**
+## **Get transaction details**
 
-returns the status of a specific transaction hash
+returns the transaction details of specific txhash
 
 - **URL** <br />
-  `/etherscan/txhash-status`
+  `/etherscan/transaction/details`
 
 - **Method:** <br />
   `GET`
@@ -16,15 +16,13 @@ returns the status of a specific transaction hash
 - **BODY Params** <br />
   ```text
    {
-     "username: "johndoe",
+     "currency: "eth", <eth | usdc>
      "txhash": "0xb325049f5b91851a0a5c88043035cc735bcdb5476f46ad313b4c06c2d5857977"
    }
   ```
 - **Success Response:**
-  Note: isError":"0" = Pass , isError":"1" = Error
   ```json
   {
-    "username": "johndoe",
     "jsonrpc": "2.0",
     "id": 1,
     "result": {
@@ -42,7 +40,11 @@ returns the status of a specific transaction hash
       "type": "0x0",
       "v": "0x25",
       "r": "0x68fd9c3c5f5dd6c8ac3c11090a48a89b5775bb1998ee119a242a6c4de29c9f2f",
-      "s": "0x1fdd07d8eee630cb646fdb1d917a982e61236376f2138488efad5f45e58e5b00"
+      "s": "0x1fdd07d8eee630cb646fdb1d917a982e61236376f2138488efad5f45e58e5b00",
+      "decodedData": {
+        "to": "0x43a0f7c69388b5880fb7e30c6e9999c83f9290c6",
+        "value": "0.42139958"
+      }
     }
   }
   ```

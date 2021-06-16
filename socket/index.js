@@ -7,7 +7,7 @@ exports.WSetherscan = (ws, wss, app) => {
     try {
       const data = JSON.parse(message);
 
-      if (!data || !data.txhash || !data.currency) {
+      if (!data || !data.txhash) {
         ws.send(
           JSON.stringify({
             error: true,
