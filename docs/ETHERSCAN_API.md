@@ -74,9 +74,9 @@ withdraw assets from EGS wallet
 - **Success Response:**
   ```json
   {
-    error: false,
-    message: "success",
-    tx_hash: TRANSACTION_HASH,
+    "error": false,
+    "message": "success",
+    "tx_hash": "<TRANSACTION_HASH>",
   }
   ```
   
