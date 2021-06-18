@@ -26,12 +26,12 @@ const ROPSTEN_USDC_ADDRESS = "0x07865c6e87b9f70255377e024ace6630c1eaa37f"
 exports.withdrawUSDC = async (req, res) => {
   const { toHex, toWei, fromWei } = Web3.utils;
   try {
-    const { address, value  } = req.body;
+    const { address, value, gasPrice  } = req.body;
 
-    if (!address || !value) {
+    if (!address || !value || !gasPrice) {
       return res.status(400).json({
         error: true,
-        message: 'Required parameters: address, value'
+        message: 'Required parameters: address, value, gasPrice'
       })
     }
 
@@ -49,21 +49,21 @@ exports.withdrawUSDC = async (req, res) => {
       }]
     }, [address, `${(+value) * 1000000}`]);
 
-    console.log({ encodedAbi, value: (+value) * 1000000 })
     
-    const { data } = await axios.get(GAS_PRICE_URL)
+    // const { data } = await axios.get(GAS_PRICE_URL)
+    // const gasPrice = toWei(data.result.FastGasPrice, "gwei")
+  
     // custon nonce data
     // const { data: { nonce }} = await axios.get(TEMP_NONCE_EXT_DATA, { headers })
     // nonce based on latest block
     const nonce = await web3.eth.getTransactionCount(META_ADDRESS)
-    const gasPrice = toWei(data.result.FastGasPrice, "gwei")
     // const parsedValue = toWei(value.toString(), "ether")
     // const gasPriceInEth = fromWei(gasPrice, "ether")
 
     const rawTx = {
       nonce,
-      gasPrice: toHex(+gasPrice * 1.5),
-      gasLimit: toHex("100000"),
+      gasPrice: toHex(gasPrice),
+      gasLimit: toHex("500000"),
       from: META_ADDRESS,
       to: ROPSTEN_USDC_ADDRESS,
       data: encodedAbi,

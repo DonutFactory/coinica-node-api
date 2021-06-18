@@ -25,31 +25,32 @@ const GAS_PRICE_URL = `https://api.etherscan.io/api?module=gastracker&action=gas
 exports.withdrawEther = async (req, res) => {
   const { toHex, toWei, fromWei } = Web3.utils;
   try {
-    const { address, value  } = req.body;
+    const { address, value, gasPrice  } = req.body;
 
-    if (!address || !value) {
+    if (!address || !value || !gasPrice) {
       return res.status(400).json({
         error: true,
-        message: 'Required parameters: address, value'
+        message: 'Required parameters: address, value, gasPrice'
       })
     }
 
     const web3 = new Web3(new Web3.providers.HttpProvider(`https://:${INFURA_PRIVATE_KEY}@${NETWORK_CHAIN}.infura.io/v3/${INFURA_PROJECT_ID}`));
     
-    const { data } = await axios.get(GAS_PRICE_URL)
+    // const { data } = await axios.get(GAS_PRICE_URL)
+    // const gasPrice = toWei(data.result.FastGasPrice, "gwei")
+
     // custon nonce data
     // const { data: { nonce }} = await axios.get(TEMP_NONCE_EXT_DATA, { headers })
     // nonce based on latest block
     const nonce = await web3.eth.getTransactionCount(META_ADDRESS)
 
-    const gasPrice = toWei(data.result.FastGasPrice, "gwei")
     const parsedValue = toWei(value.toString(), "ether")
     // const gasPriceInEth = fromWei(gasPrice, "ether")
 
     const rawTx = {
       nonce,
-      gasPrice: toHex(+gasPrice * 1.5),
-      gasLimit: toHex("100000"),
+      gasPrice: toHex(gasPrice),
+      gasLimit: toHex("500000"),
       from: META_ADDRESS,
       to: address,
       value: toHex(parsedValue),
