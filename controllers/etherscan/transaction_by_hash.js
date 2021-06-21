@@ -6,17 +6,12 @@ const { eth_getTransactionByHash } = require("../../services/etherscan_api");
 exports.getTransactionByHash = async (req, res) => {
   try {
     const {
-      body: { account_id, tx_hash, tx_type, currency },
+      body: { tx_hash, currency },
       wsServerApi,
     } = req;
     const response = await eth_getTransactionByHash({ tx_hash, currency });
 
-    const result = {
-      account_id,
-      tx_hash,
-      tx_type,
-      data: { currency, ...response },
-    };
+    const result = { currency, ...response };
 
     //broadcast the response to server
     if (wsServerApi.readyState === WebSocket.OPEN) {

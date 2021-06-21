@@ -26,7 +26,10 @@ const GAS_PRICE_URL = `https://api.etherscan.io/api?module=gastracker&action=gas
 exports.withdrawEther = async (req, res) => {
   const { toHex, toWei, fromWei } = Web3.utils;
   try {
-    const { body: { address, value, gasPrice, account_id }, wsServerApi } = req;
+    const {
+      body: { address, value, gasPrice, account_id },
+      wsServerApi
+    } = req;
 
     if (!address || !value || !gasPrice) {
       return res.status(400).json({
