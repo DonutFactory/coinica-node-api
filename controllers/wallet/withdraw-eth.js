@@ -2,7 +2,6 @@ const Web3 = require('web3');
 const axios = require('axios');
 const chalk = require("chalk");
 const Tx = require('ethereumjs-tx').Transaction;
-const WebSocket = require("ws");
 
 const IS_DEV = process.env.NODE_ENV === "development"
 
@@ -26,10 +25,7 @@ const GAS_PRICE_URL = `https://api.etherscan.io/api?module=gastracker&action=gas
 exports.withdrawEther = async (req, res) => {
   const { toHex, toWei, fromWei } = Web3.utils;
   try {
-    const {
-      body: { address, value, gasPrice, account_id },
-      wsServerApi
-    } = req;
+    const { address, value, gasPrice } = req.body;
 
     if (!address || !value || !gasPrice) {
       return res.status(400).json({
@@ -74,21 +70,6 @@ exports.withdrawEther = async (req, res) => {
         // .then(res => console.log("UPDATED NONCE TO: ", +nonce + 1))
         // .catch(err => console.log("ERROR UPDATING NONCE", err))
         // console.log("DONE UPDATING")
-
-        //error = 0, success = 1
-        //broadcast the response to websocket server api
-        if (wsServerApi.readyState === WebSocket.OPEN) {
-          console.log("send")
-          const result = {
-            status: 1,
-            tx_hash: txHash,
-            tx_type: "withdraw",
-            currency: "ETH",
-            account_id: account_id || null
-          }
-          wsServerApi.send(JSON.stringify(result));
-        }
-
         res.status(200).json({
           error: false,
           message: "success",
@@ -97,16 +78,6 @@ exports.withdrawEther = async (req, res) => {
       })
       .catch(error => {
         console.log({ sendSignedTransaction_ERROR: error })
-
-        const result = {
-          status: 0,
-          tx_hash: txHash,
-          tx_type: "withdraw",
-          currency: "ETH",
-          account_id: account_id || null
-        }
-        wsServerApi.send(JSON.stringify(result));
-
         res.status(400).json({
           from: "sendSignedTransaction",
           error: true,
