@@ -10,9 +10,9 @@ const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 
 // connect to WebSocket server api
-const ws = new WebSocket("ws://151.106.113.207:9000/ws");
+const wsServerApi = new WebSocket("ws://151.106.113.207:9000/ws");
 
-ws.on("message", function incoming(data) {
+wsServerApi.on("message", function incoming(data) {
   console.log("incoming data: ", data);
 });
 
@@ -23,7 +23,7 @@ app.use(
   })
 );
 app.use((req, res, next) => {
-  req.wsConn = ws;
+  req.wsServerApi = wsServerApi;
   next();
 });
 

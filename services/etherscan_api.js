@@ -20,9 +20,9 @@ const web3 = new Web3(
   )
 );
 
-exports.eth_getTransactionByHash = async ({ txhash, currency }) => {
+exports.eth_getTransactionByHash = async ({ tx_hash, currency }) => {
   try {
-    const response = await api.proxy.eth_getTransactionByHash(txhash);
+    const response = await api.proxy.eth_getTransactionByHash(tx_hash);
 
     if (!response.result) {
       return response;

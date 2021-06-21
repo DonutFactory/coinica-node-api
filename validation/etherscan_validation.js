@@ -1,7 +1,9 @@
 const Joi = require("joi");
 
 const txSchema = Joi.object({
-  txhash: Joi.string().required(),
+  account_id: Joi.string().required(),
+  tx_type: Joi.string().required(),
+  tx_hash: Joi.string().required(),
   currency: Joi.string().required(),
 });
 
