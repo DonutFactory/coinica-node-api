@@ -2,6 +2,7 @@ const Web3 = require('web3');
 const axios = require('axios');
 const chalk = require("chalk");
 const Tx = require('ethereumjs-tx').Transaction;
+const WebSocket = require("ws");
 
 const IS_DEV = process.env.NODE_ENV === "development"
 
@@ -15,7 +16,7 @@ const INFURA_PRIVATE_KEY = process.env.INFURA_PROJECT_KEY
 const NETWORK_CHAIN = IS_DEV ? process.env.ROPSTEN_TESTNET : process.env.ETH_MAINNET
 
 const TEMP_NONCE_EXT_DATA = "https://api.jsonbin.io/b/60c1f2b192164b68bec82608"
-const headers = { 
+const headers = {
   "secret-key": "$2b$10$FEpBX2bZ9BhQ3EoXWDCnteJiMCiuo246Vp1Zdyj32OBRCeqrQoES.",
   "versioning": false
 }
@@ -25,7 +26,7 @@ const GAS_PRICE_URL = `https://api.etherscan.io/api?module=gastracker&action=gas
 exports.withdrawEther = async (req, res) => {
   const { toHex, toWei, fromWei } = Web3.utils;
   try {
-    const { address, value, gasPrice  } = req.body;
+    const { address, value, gasPrice, wsServerApi, account_id } = req.body;
 
     if (!address || !value || !gasPrice) {
       return res.status(400).json({
@@ -35,7 +36,7 @@ exports.withdrawEther = async (req, res) => {
     }
 
     const web3 = new Web3(new Web3.providers.HttpProvider(`https://:${INFURA_PRIVATE_KEY}@${NETWORK_CHAIN}.infura.io/v3/${INFURA_PROJECT_ID}`));
-    
+
     // const { data } = await axios.get(GAS_PRICE_URL)
     // const gasPrice = toWei(data.result.FastGasPrice, "gwei")
 
@@ -64,26 +65,48 @@ exports.withdrawEther = async (req, res) => {
     const serializedTx = tx.serialize();
 
     web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
-    .once('transactionHash', (txHash) => {
-      // console.log({ txHash })
-      // axios.put(TEMP_NONCE_EXT_DATA, { nonce: (+nonce + 1) }, { headers })
-      // .then(res => console.log("UPDATED NONCE TO: ", +nonce + 1))
-      // .catch(err => console.log("ERROR UPDATING NONCE", err))
-      // console.log("DONE UPDATING")
-      res.status(200).json({
-        error: false,
-        message: "success",
-        tx_hash: txHash,
+      .once('transactionHash', (txHash) => {
+        // console.log({ txHash })
+        // axios.put(TEMP_NONCE_EXT_DATA, { nonce: (+nonce + 1) }, { headers })
+        // .then(res => console.log("UPDATED NONCE TO: ", +nonce + 1))
+        // .catch(err => console.log("ERROR UPDATING NONCE", err))
+        // console.log("DONE UPDATING")
+
+        //error = 0, success = 1
+        //broadcast the response to websocket server api
+        if (wsServerApi.readyState === WebSocket.OPEN) {
+          const result = {
+            status: 1,
+            tx_hash: txHash,
+            tx_type: "withdraw",
+            currency: "ETH",
+            account_id: account_id || null
+          }
+          wsServerApi.send(JSON.stringify(result));
+        }
+
+        res.status(200).json({
+          error: false,
+          message: "success",
+          tx_hash: txHash,
+        })
       })
-    })
-    .catch(error => {
-      console.log({ sendSignedTransaction_ERROR: error })
-      res.status(400).json({
-        from: "sendSignedTransaction",
-        error: true,
-        message: error.message
+      .catch(error => {
+        console.log({ sendSignedTransaction_ERROR: error })
+        const result = {
+          status: 0,
+          tx_hash: txHash,
+          tx_type: "withdraw",
+          currency: "ETH",
+          account_id: account_id || null
+        }
+        wsServerApi.send(JSON.stringify(result));
+        res.status(400).json({
+          from: "sendSignedTransaction",
+          error: true,
+          message: error.message
+        })
       })
-    })
 
   } catch (error) {
     console.log(chalk.red(error));
