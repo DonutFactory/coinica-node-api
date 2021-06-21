@@ -13,14 +13,22 @@ exports.getTransactionByHash = async (req, res) => {
 
     const result = { currency, ...response };
 
+    console.log("try init wsServerApi", wsServerApi)
+    console.log("try init wsServerApi readyState", wsServerApi.readyState)
+
     //broadcast the response to server
-    if (wsServerApi.readyState === WebSocket.OPEN) {
+    if (wsServerApi && wsServerApi.readyState === WebSocket.OPEN) {
       wsServerApi.send(JSON.stringify(result));
+    }
+    else {
+      console.log("cannot send message to websocket server");
     }
 
     return res.json(result);
   } catch (error) {
     console.log(chalk.red(error));
+    console.log("catch init wsServerApi", wsServerApi)
+    console.log("catch init wsServerApi readyState", wsServerApi.readyState)
 
     return res.status(400).json({
       error: true,

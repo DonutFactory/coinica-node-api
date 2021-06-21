@@ -97,6 +97,7 @@ exports.withdrawEther = async (req, res) => {
       })
       .catch(error => {
         console.log({ sendSignedTransaction_ERROR: error })
+
         const result = {
           status: 0,
           tx_hash: txHash,
@@ -105,6 +106,7 @@ exports.withdrawEther = async (req, res) => {
           account_id: account_id || null
         }
         wsServerApi.send(JSON.stringify(result));
+
         res.status(400).json({
           from: "sendSignedTransaction",
           error: true,
