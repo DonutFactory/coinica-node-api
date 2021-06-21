@@ -9,8 +9,12 @@ const port = process.env.PORT || 3000;
 // init a simple http server
 const server = http.createServer(app);
 
-// init the WebSocket server instance
-const wss = new WebSocket.Server({ server, path: "/etherscan" });
+// connect to WebSocket server api
+const ws = new WebSocket("ws://151.106.113.207:9000/ws");
+
+ws.on("message", function incoming(data) {
+  console.log("incoming data: ", data);
+});
 
 app.use(express.json());
 app.use(
@@ -18,11 +22,10 @@ app.use(
     extended: false,
   })
 );
-
-const { WSetherscan } = require("./socket");
-
-// Handle client websocket requests
-wss.on("connection", (ws) => WSetherscan(ws, wss, app));
+app.use((req, res, next) => {
+  req.wsConn = ws;
+  next();
+});
 
 // Routes
 const routes = require("./routes/index");
