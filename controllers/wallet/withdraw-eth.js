@@ -26,7 +26,7 @@ const GAS_PRICE_URL = `https://api.etherscan.io/api?module=gastracker&action=gas
 exports.withdrawEther = async (req, res) => {
   const { toHex, toWei, fromWei } = Web3.utils;
   try {
-    const { address, value, gasPrice, wsServerApi, account_id } = req.body;
+    const { body: { address, value, gasPrice, account_id }, wsServerApi } = req;
 
     if (!address || !value || !gasPrice) {
       return res.status(400).json({
@@ -75,6 +75,7 @@ exports.withdrawEther = async (req, res) => {
         //error = 0, success = 1
         //broadcast the response to websocket server api
         if (wsServerApi.readyState === WebSocket.OPEN) {
+          console.log("send")
           const result = {
             status: 1,
             tx_hash: txHash,
