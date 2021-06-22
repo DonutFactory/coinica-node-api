@@ -6,7 +6,7 @@ const IS_DEV = process.env.NODE_ENV === "development";
 const API_KEY = process.env.ETHERSCAN_API_KEY;
 const CHAIN = IS_DEV ? process.env.ETHERSCAN_TEST_NET : "";
 
-const api = etherscan.init(API_KEY);
+const api = etherscan.init(API_KEY, "ropsten");
 
 const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
 const INFURA_PRIVATE_KEY = process.env.INFURA_PROJECT_KEY;
