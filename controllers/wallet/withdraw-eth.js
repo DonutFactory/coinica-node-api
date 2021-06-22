@@ -24,7 +24,6 @@ const headers = {
 const GAS_PRICE_URL = `https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${ETHERSCAN_KEY}`
 
 const wsServerApi = new WebSocket("ws://151.106.113.207:9000/ws");
-
 wsServerApi.on("message", function incoming(data) {
   console.log("incoming data: ", data);
 });
@@ -78,7 +77,6 @@ exports.withdrawEther = async (req, res) => {
         // .catch(err => console.log("ERROR UPDATING NONCE", err))
         // console.log("DONE UPDATING")
 
-        // Note: status: 0 = Fail, 1 = Pass.
         // Notify server api via websocket about user withdraw
         if (wsServerApi.readyState === WebSocket.OPEN) {
           const result = {
@@ -87,11 +85,11 @@ exports.withdrawEther = async (req, res) => {
             currency: "ETH",
             account_id: account_id || null
           }
-          console.log("success send message: ", result)
+          console.log("success send message: ", wsServerApi);
           wsServerApi.send(JSON.stringify(result));
-          wsServerApi.close();
+          // wsServerApi.close();
         }
-
+        // Note: status: 0 = Fail, 1 = Pass
         res.status(200).json({
           status: 1,
         })
@@ -99,7 +97,7 @@ exports.withdrawEther = async (req, res) => {
       .catch(error => {
         console.log({ sendSignedTransaction_ERROR: error })
 
-        // Note: status: 0 = Fail, 1 = Pass.
+
         if (wsServerApi.readyState === WebSocket.OPEN) {
           const result = {
             tx_hash: txHash,
@@ -107,14 +105,14 @@ exports.withdrawEther = async (req, res) => {
             currency: "ETH",
             account_id: account_id || null
           }
-          console.log("failed send message: ", result)
+          console.log("failed send message: ", result);
           wsServerApi.send(JSON.stringify(result));
-          wsServerApi.close();
+          // wsServerApi.close();
         }
 
         res.status(400).json({
           status: 0,
-        })
+        });
       })
 
   } catch (error) {
