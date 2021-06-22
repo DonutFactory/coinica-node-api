@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const WebSocket = require("ws");
 const http = require("http");
+const cors = require("cors");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,6 +23,11 @@ app.use(
     extended: false,
   })
 );
+
+//enable cors
+app.use(cors());
+app.options('*', cors());
+
 app.use((req, res, next) => {
   req.wsServerApi = wsServerApi;
   next();
