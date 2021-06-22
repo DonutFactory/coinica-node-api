@@ -23,17 +23,15 @@ const headers = {
 
 const GAS_PRICE_URL = `https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${ETHERSCAN_KEY}`
 
-
-
 exports.withdrawEther = async (req, res) => {
   const { toHex, toWei, fromWei } = Web3.utils;
   try {
     const { body: { address, value, gasPrice, account_id }, wsServerApi } = req;
 
-    if (!address || !value || !gasPrice) {
+    if (!address || !value || !gasPrice || !account_id) {
       return res.status(400).json({
         error: true,
-        message: 'Required parameters: address, value, gasPrice'
+        message: 'Required parameters: address, value, gasPrice, account_id'
       })
     }
 
@@ -75,17 +73,15 @@ exports.withdrawEther = async (req, res) => {
         // console.log("DONE UPDATING")
 
         // Notify server api via websocket about user withdraw
-        // if (wsServerApi.readyState === WebSocket.OPEN) {
-        const result = {
-          account_id: account_id,
-          tx_hash: txHash,
-          tx_type: "WITHDRAW",
-          currency: "ETH"
+        if (wsServerApi.readyState === WebSocket.OPEN) {
+          const result = {
+            account_id: account_id,
+            tx_hash: txHash,
+            tx_type: "WITHDRAW",
+            currency: "ETH"
+          }
+          wsServerApi.send(JSON.stringify(result));
         }
-        console.log("success send message: ", wsServerApi);
-        wsServerApi.send(JSON.stringify(result));
-        // wsServerApi.close();
-        // }
         // Note: status: 0 = Fail, 1 = Pass
         return res.status(200).json({
           status: 1,
@@ -94,20 +90,18 @@ exports.withdrawEther = async (req, res) => {
       .catch(error => {
         console.log({ sendSignedTransaction_ERROR: error })
 
-
-        // if (wsServerApi.readyState === WebSocket.OPEN) {
-        const result = {
-          tx_hash: txHash,
-          tx_type: "WITHDRAW",
-          currency: "ETH",
-          account_id: account_id || null
+        //Notify if transaction has error
+        if (wsServerApi.readyState === WebSocket.OPEN) {
+          const result = {
+            tx_hash: txHash,
+            tx_type: "WITHDRAW",
+            currency: "ETH",
+            account_id: account_id
+          }
+          wsServerApi.send(JSON.stringify(result));
         }
-        console.log("failed send message: ", result);
-        wsServerApi.send(JSON.stringify(result));
-        // wsServerApi.close();
-        // }
 
-        res.status(400).json({
+        return res.status(400).json({
           status: 0,
         });
       })

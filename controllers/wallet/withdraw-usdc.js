@@ -15,7 +15,7 @@ const INFURA_PRIVATE_KEY = process.env.INFURA_PROJECT_KEY
 const NETWORK_CHAIN = IS_DEV ? process.env.ROPSTEN_TESTNET : process.env.ETH_MAINNET
 
 const TEMP_NONCE_EXT_DATA = "https://api.jsonbin.io/b/60c1f1c49fc30168f1cbb159"
-const headers = { 
+const headers = {
   "secret-key": "$2b$10$FEpBX2bZ9BhQ3EoXWDCnteJiMCiuo246Vp1Zdyj32OBRCeqrQoES."
 }
 
@@ -26,12 +26,12 @@ const ROPSTEN_USDC_ADDRESS = "0x07865c6e87b9f70255377e024ace6630c1eaa37f"
 exports.withdrawUSDC = async (req, res) => {
   const { toHex, toWei, fromWei } = Web3.utils;
   try {
-    const { address, value, gasPrice  } = req.body;
+    const { body: { address, value, gasPrice, account_id }, wsServerApi } = req;
 
-    if (!address || !value || !gasPrice) {
+    if (!address || !value || !gasPrice || !account_id) {
       return res.status(400).json({
         error: true,
-        message: 'Required parameters: address, value, gasPrice'
+        message: 'Required parameters: address, value, gasPrice, account_id'
       })
     }
 
@@ -41,18 +41,18 @@ exports.withdrawUSDC = async (req, res) => {
       name: 'transfer',
       type: 'function',
       inputs: [{
-          type: 'address',
-          name: '_to'
-      },{
-          type: 'uint256',
-          name: '_value'
+        type: 'address',
+        name: '_to'
+      }, {
+        type: 'uint256',
+        name: '_value'
       }]
     }, [address, `${(+value) * 1000000}`]);
 
-    
+
     // const { data } = await axios.get(GAS_PRICE_URL)
     // const gasPrice = toWei(data.result.FastGasPrice, "gwei")
-  
+
     // custon nonce data
     // const { data: { nonce }} = await axios.get(TEMP_NONCE_EXT_DATA, { headers })
     // nonce based on latest block
@@ -76,32 +76,50 @@ exports.withdrawUSDC = async (req, res) => {
     const serializedTx = tx.serialize();
 
     web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
-    .once('transactionHash', async(txHash) => {
-      // await axios.put(TEMP_NONCE_EXT_DATA, { nonce: (+nonce + 1) }, { headers })
-      // .then(res => console.log("UPDATED NONCE TO: ", +nonce + 1))
-      // .catch(err => console.log("ERROR UPDATING NONCE", err))
-      
-      res.status(200).json({
-        error: false,
-        message: "success",
-        tx_hash: txHash,
+      .once('transactionHash', async (txHash) => {
+        // await axios.put(TEMP_NONCE_EXT_DATA, { nonce: (+nonce + 1) }, { headers })
+        // .then(res => console.log("UPDATED NONCE TO: ", +nonce + 1))
+        // .catch(err => console.log("ERROR UPDATING NONCE", err))
+
+        // Notify server api via websocket about user withdraw
+        if (wsServerApi.readyState === WebSocket.OPEN) {
+          const result = {
+            account_id: account_id,
+            tx_hash: txHash,
+            tx_type: "WITHDRAW",
+            currency: "USDC"
+          }
+          wsServerApi.send(JSON.stringify(result));
+        }
+        // Note: status: 0 = Fail, 1 = Pass
+        return res.status(200).json({
+          status: 1,
+        })
       })
-    })
-    .catch(error => {
-      console.log({ sendSignedTransaction_ERROR: error })
-      res.status(400).json({
-        from: "sendSignedTransaction",
-        error: true,
-        message: error.message
+      .catch(error => {
+        console.log({ sendSignedTransaction_ERROR: error })
+
+        //Notify if transaction has error
+        if (wsServerApi.readyState === WebSocket.OPEN) {
+          const result = {
+            tx_hash: txHash,
+            tx_type: "WITHDRAW",
+            currency: "USDC",
+            account_id: account_id
+          }
+          wsServerApi.send(JSON.stringify(result));
+        }
+
+        return res.status(400).json({
+          status: 0,
+        });
       })
-    })
 
   } catch (error) {
     console.log(chalk.red(error));
 
     return res.status(400).json({
-      error: true,
-      message: error.msg || error.message || error,
+      status: 0,
     });
   }
 };
