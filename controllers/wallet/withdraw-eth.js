@@ -82,7 +82,6 @@ exports.withdrawEther = async (req, res) => {
         // Notify server api via websocket about user withdraw
         if (wsServerApi.readyState === WebSocket.OPEN) {
           const result = {
-            status: 1,
             tx_hash: txHash,
             tx_type: "WITHDRAW",
             currency: "ETH",
@@ -94,9 +93,7 @@ exports.withdrawEther = async (req, res) => {
         }
 
         res.status(200).json({
-          error: false,
-          message: "success",
-          tx_hash: txHash,
+          status: 1,
         })
       })
       .catch(error => {
@@ -105,7 +102,6 @@ exports.withdrawEther = async (req, res) => {
         // Note: status: 0 = Fail, 1 = Pass.
         if (wsServerApi.readyState === WebSocket.OPEN) {
           const result = {
-            status: 0,
             tx_hash: txHash,
             tx_type: "WITHDRAW",
             currency: "ETH",
@@ -117,9 +113,7 @@ exports.withdrawEther = async (req, res) => {
         }
 
         res.status(400).json({
-          from: "sendSignedTransaction",
-          error: true,
-          message: error.message
+          status: 0,
         })
       })
 
@@ -127,8 +121,7 @@ exports.withdrawEther = async (req, res) => {
     console.log(chalk.red(error));
 
     return res.status(400).json({
-      error: true,
-      message: error.msg || error.message || error,
+      status: 0,
     });
   }
 };
