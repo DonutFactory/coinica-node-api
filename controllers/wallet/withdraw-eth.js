@@ -2,6 +2,7 @@ const Web3 = require('web3');
 const axios = require('axios');
 const chalk = require("chalk");
 const Tx = require('ethereumjs-tx').Transaction;
+const WebSocket = require("ws");
 
 const IS_DEV = process.env.NODE_ENV === "development"
 
@@ -22,10 +23,16 @@ const headers = {
 
 const GAS_PRICE_URL = `https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${ETHERSCAN_KEY}`
 
+const wsServerApi = new WebSocket("ws://151.106.113.207:9000/ws");
+
+wsServerApi.on("message", function incoming(data) {
+  console.log("incoming data: ", data);
+});
+
 exports.withdrawEther = async (req, res) => {
   const { toHex, toWei, fromWei } = Web3.utils;
   try {
-    const { address, value, gasPrice } = req.body;
+    const { address, value, gasPrice, account_id } = req.body;
 
     if (!address || !value || !gasPrice) {
       return res.status(400).json({
@@ -70,6 +77,22 @@ exports.withdrawEther = async (req, res) => {
         // .then(res => console.log("UPDATED NONCE TO: ", +nonce + 1))
         // .catch(err => console.log("ERROR UPDATING NONCE", err))
         // console.log("DONE UPDATING")
+
+        // Note: status: 0 = Fail, 1 = Pass.
+        // Notify server api via websocket about user withdraw
+        if (wsServerApi.readyState === WebSocket.OPEN) {
+          const result = {
+            status: 1,
+            tx_hash: txHash,
+            tx_type: "WITHDRAW",
+            currency: "ETH",
+            account_id: account_id || null
+          }
+          console.log("success send message: ", result)
+          wsServerApi.send(JSON.stringify(result));
+          wsServerApi.close();
+        }
+
         res.status(200).json({
           error: false,
           message: "success",
@@ -78,6 +101,21 @@ exports.withdrawEther = async (req, res) => {
       })
       .catch(error => {
         console.log({ sendSignedTransaction_ERROR: error })
+
+        // Note: status: 0 = Fail, 1 = Pass.
+        if (wsServerApi.readyState === WebSocket.OPEN) {
+          const result = {
+            status: 0,
+            tx_hash: txHash,
+            tx_type: "WITHDRAW",
+            currency: "ETH",
+            account_id: account_id || null
+          }
+          console.log("failed send message: ", result)
+          wsServerApi.send(JSON.stringify(result));
+          wsServerApi.close();
+        }
+
         res.status(400).json({
           from: "sendSignedTransaction",
           error: true,
