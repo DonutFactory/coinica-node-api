@@ -123,6 +123,7 @@ exports.withdrawUSDC = async (req, res) => {
 
     return res.status(400).json({
       message: "something went wrong",
+      error: error,
       status: 0,
     });
   }
