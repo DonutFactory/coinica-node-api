@@ -113,6 +113,7 @@ exports.withdrawUSDC = async (req, res) => {
 
         return res.status(400).json({
           message: "transaction failed",
+          error: error,
           status: 0,
         });
       })
