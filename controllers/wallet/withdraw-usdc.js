@@ -2,6 +2,7 @@ const Web3 = require('web3');
 const axios = require('axios');
 const chalk = require("chalk");
 const Tx = require('ethereumjs-tx').Transaction;
+const WebSocket = require("ws");
 
 const IS_DEV = process.env.NODE_ENV === "development"
 
