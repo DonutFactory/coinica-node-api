@@ -1,4 +1,4 @@
-# API ROUTES (GHOST QUEST)
+# API ROUTES (TREASUREHUNT)
 <br />
 <br />
 
