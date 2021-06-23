@@ -112,6 +112,7 @@ exports.withdrawUSDC = async (req, res) => {
         }
 
         return res.status(400).json({
+          message: "transaction failed",
           status: 0,
         });
       })
@@ -120,6 +121,7 @@ exports.withdrawUSDC = async (req, res) => {
     console.log(chalk.red(error));
 
     return res.status(400).json({
+      message: "something went wrong",
       status: 0,
     });
   }
