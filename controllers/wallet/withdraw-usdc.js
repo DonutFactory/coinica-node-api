@@ -27,7 +27,7 @@ const ROPSTEN_USDC_ADDRESS = "0x07865c6e87b9f70255377e024ace6630c1eaa37f"
 exports.withdrawUSDC = async (req, res) => {
   const { toHex, toWei, fromWei } = Web3.utils;
   try {
-    const { body: { address, value, gasPrice, account_id }, wsServerApi } = req;
+    const { body: { address, value, gasPrice, account_id } } = req;
 
     if (!address || !value || !gasPrice || !account_id) {
       return res.status(400).json({
@@ -83,33 +83,34 @@ exports.withdrawUSDC = async (req, res) => {
         // .catch(err => console.log("ERROR UPDATING NONCE", err))
 
         // Notify server api via websocket about user withdraw
-        if (wsServerApi.readyState === WebSocket.OPEN) {
-          const result = {
-            account_id: account_id,
-            tx_hash: txHash,
-            tx_type: "WITHDRAW",
-            currency: "USDC"
-          }
-          wsServerApi.send(JSON.stringify(result));
-        }
+        // if (wsServerApi.readyState === WebSocket.OPEN) {
+        //   const result = {
+        //     account_id: account_id,
+        //     tx_hash: txHash,
+        //     tx_type: "WITHDRAW",
+        //     currency: "USDC"
+        //   }
+        //   wsServerApi.send(JSON.stringify(result));
+        // }
         // Note: status: 0 = Fail, 1 = Pass
         return res.status(200).json({
           status: 1,
+          txHash
         })
       })
       .catch(error => {
         console.log({ sendSignedTransaction_ERROR: error })
 
         //Notify if transaction has error
-        if (wsServerApi.readyState === WebSocket.OPEN) {
-          const result = {
-            tx_hash: txHash,
-            tx_type: "WITHDRAW",
-            currency: "USDC",
-            account_id: account_id
-          }
-          wsServerApi.send(JSON.stringify(result));
-        }
+        // if (wsServerApi.readyState === WebSocket.OPEN) {
+        //   const result = {
+        //     tx_hash: txHash,
+        //     tx_type: "WITHDRAW",
+        //     currency: "USDC",
+        //     account_id: account_id
+        //   }
+        //   wsServerApi.send(JSON.stringify(result));
+        // }
 
         return res.status(400).json({
           message: "transaction failed",
