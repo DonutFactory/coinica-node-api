@@ -26,7 +26,7 @@ app.use(
 
 //enable cors
 app.use(cors());
-app.options('*', cors());
+app.options("*", cors());
 
 app.use((req, res, next) => {
   req.wsServerApi = wsServerApi;
@@ -40,6 +40,7 @@ const treasurehunt = require("./routes/treasurehunt");
 const multiCurrencyV1 = require("./routes/multi-currency/v1");
 const etherscan = require("./routes/etherscan");
 const wallet = require("./routes/wallet");
+const coincap = require("./routes/coincap");
 
 app.use("/", routes);
 app.use("/ghostquest", ghostquest);
@@ -47,6 +48,7 @@ app.use("/treasurehunt", treasurehunt);
 app.use("/multi-currency/v1", multiCurrencyV1);
 app.use("/etherscan", etherscan);
 app.use("/wallet", wallet);
+app.use("/coincap", coincap);
 
 server.listen(port, () => {
   console.log(`Server is started on port ${port}...`);
