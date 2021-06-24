@@ -27,7 +27,7 @@ const ROPSTEN_USDC_ADDRESS = "0x07865c6e87b9f70255377e024ace6630c1eaa37f"
 exports.withdrawUSDC = async (req, res) => {
   const { toHex, toWei, fromWei } = Web3.utils;
   try {
-    const { body: { address, value, gasPrice, account_id } } = req;
+    const { body: { address, value, gasPrice, account_id }, wsServerApi } = req;
 
     if (!address || !value || !gasPrice || !account_id) {
       return res.status(400).json({
@@ -76,8 +76,9 @@ exports.withdrawUSDC = async (req, res) => {
     tx.sign(PRIVATE_KEY);
     const serializedTx = tx.serialize();
 
+    //Test and use promise .then if event emitter still not working
     web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
-      .once('transactionHash', async (txHash) => {
+      .on('transactionHash', (txHash) => {
         // await axios.put(TEMP_NONCE_EXT_DATA, { nonce: (+nonce + 1) }, { headers })
         // .then(res => console.log("UPDATED NONCE TO: ", +nonce + 1))
         // .catch(err => console.log("ERROR UPDATING NONCE", err))
@@ -93,7 +94,7 @@ exports.withdrawUSDC = async (req, res) => {
         //   wsServerApi.send(JSON.stringify(result));
         // }
         // Note: status: 0 = Fail, 1 = Pass
-        return res.status(200).json({
+        res.status(200).json({
           status: 1,
           txHash
         })
