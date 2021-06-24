@@ -1,4 +1,4 @@
-const { Api, JsonRpc, RpcError } = require('eosjs');
+const { Api, JsonRpc } = require('eosjs');
 const { JsSignatureProvider } = require('eosjs/dist/eosjs-jssig');      // development only
 const fetch = require('node-fetch');                                    // node only; not needed in browsers
 const { TextEncoder, TextDecoder } = require('util');                   // node only; native TextEncoder/Decoder
@@ -15,6 +15,42 @@ const eosServer = `${EOS_SERVER_PROTOCOL}://${EOS_SERVER_HOST}:${EOS_SERVER_PORT
 const signatureProvider = new JsSignatureProvider([EOS_PRIVATE_KEY]);
 const rpc = new JsonRpc(eosServer, { fetch })
 const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
+
+exports.getTableData = async (game = null, id) => {
+  let contractName = "";
+
+  try {
+    console.log(`executing action in game ${game}: ***( get user table data )*** user: `, id)
+    if ((game + "").toLowerCase() === 'treasurehunt') {
+      contractName = EOS_TH_CONTRACT_NAME;
+    } else if ((game + "").toLowerCase() === 'ghostquest') {
+      contractName = EOS_GQ_CONTRACT_NAME
+    } else if ((game + "").toLowerCase() === 'mahjonghilo') {
+      contractName = EOS_MJ_CONTRACT_NAME
+    } else {
+      throw new Error("invalid game")
+    }
+  
+    const table = await rpc.get_table_rows({
+      json: true,
+      code: contractName,
+      scope: contractName,
+      table: 'users',
+      limit: 1,
+      lower_bound: id,
+    });
+
+    console.log({ table })
+
+    if (table && table.rows.length > 0 && table.rows[0].id === id) {
+      return table.rows[0]
+    } else {
+      return []
+    }
+  } catch (error) {
+    return []
+  }
+}
 
 exports.takeAction = async (action, game = null, data) => {
   let contractName = "";
