@@ -6,6 +6,7 @@ const { TextEncoder, TextDecoder } = require('util');                   // node 
 const EOS_PRIVATE_KEY = process.env.EOS_PRIVATE_KEY || "";
 const EOS_TH_CONTRACT_NAME = process.env.EOS_TH_CONTRACT_NAME || "";
 const EOS_GQ_CONTRACT_NAME = process.env.EOS_GQ_CONTRACT_NAME || "";
+const EOS_MJ_CONTRACT_NAME = process.env.EOS_MJ_CONTRACT_NAME || "";
 const EOS_SERVER_PROTOCOL = process.env.EOS_PROTOCOL || "http";
 const EOS_SERVER_HOST = process.env.EOS_HOST;
 const EOS_SERVER_PORT = process.env.EOS_PORT;
@@ -18,12 +19,14 @@ const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), te
 exports.takeAction = async (action, game = null, data) => {
   let contractName = "";
 
-  console.log(`executing action: ***( ${action} )*** with data: `, data)
+  console.log(`executing action in game ${game}: ***( ${action} )*** with data: `, data,)
   try {
     if ((game + "").toLowerCase() === 'treasurehunt') {
       contractName = EOS_TH_CONTRACT_NAME;
     } else if ((game + "").toLowerCase() === 'ghostquest') {
       contractName = EOS_GQ_CONTRACT_NAME
+    } else if ((game + "").toLowerCase() === 'mahjonghilo') {
+      contractName = EOS_MJ_CONTRACT_NAME
     } else {
       throw new Error("invalid game")
     }
@@ -33,7 +36,7 @@ exports.takeAction = async (action, game = null, data) => {
         account: contractName,
         name: action,
         authorization: [{
-          actor: EOS_TH_CONTRACT_NAME,
+          actor: contractName,
           permission: 'active',
         }],
         data
