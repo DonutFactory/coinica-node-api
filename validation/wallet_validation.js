@@ -1,4 +1,4 @@
-const Joi = require("Joi");
+const Joi = require("joi");
 
 const depositSchema = Joi.object({
   account_id: Joi.string().required(),
