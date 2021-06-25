@@ -3,7 +3,6 @@ const axios = require("axios");
 const chalk = require("chalk");
 const Tx = require("ethereumjs-tx").Transaction;
 const WebSocket = require("ws");
-const { toFixed } = require("../../utils");
 
 const IS_DEV = process.env.NODE_ENV === "development";
 
@@ -63,7 +62,7 @@ exports.withdrawEther = async (req, res) => {
 
     const rawTx = {
       nonce,
-      gasPrice: toHex(toFixed(gasPrice)),
+      gasPrice: toHex(gasPrice),
       gasLimit: toHex("500000"),
       from: META_ADDRESS.toLowerCase(),
       to: address.toLowerCase(),
