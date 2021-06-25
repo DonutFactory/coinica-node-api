@@ -1,8 +1,9 @@
 require("dotenv").config();
 const express = require("express");
-const WebSocket = require("ws");
+const ws = require("ws");
 const http = require("http");
 const cors = require("cors");
+const reconnectWs = require("reconnecting-websocket");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -11,18 +12,25 @@ const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 
 // connect to WebSocket server api
-const wsServerApi = new WebSocket("ws://151.106.113.207:9000/ws");
+const options = {
+  WebSocket: ws,
+  connectionTimeout: 1000,
+};
+const wsServerApi = new reconnectWs(
+  "ws://151.106.113.207:9000/ws",
+  [],
+  options
+);
 
-wsServerApi.on("open", function open() {
+wsServerApi.addEventListener("open", function open() {
   console.log("WS server connected");
 });
 
-wsServerApi.on("message", function incoming(data) {
-  console.log("WS server incoming data: ", data);
+wsServerApi.addEventListener("message", function incoming(event) {
+  console.log("WS server incoming data: ", event.data);
 });
 
-wsServerApi.on("close", function close() {
-  //TODO: implement reconnection
+wsServerApi.addEventListener("close", function close() {
   console.log("WS server is disconnected");
 });
 
