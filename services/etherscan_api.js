@@ -1,12 +1,12 @@
 const etherscan = require("etherscan-api");
 const Web3 = require("web3");
-const { fromWei, toBN, BN, hexToNumber, toWei } = Web3.utils;
+const { fromWei, hexToNumber } = Web3.utils;
 
 const IS_DEV = process.env.NODE_ENV === "development";
 const API_KEY = process.env.ETHERSCAN_API_KEY;
 const CHAIN = IS_DEV ? process.env.ETHERSCAN_TEST_NET : "";
 
-const api = etherscan.init(API_KEY, "ropsten");
+const api = etherscan.init(API_KEY, CHAIN);
 
 const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
 const INFURA_PRIVATE_KEY = process.env.INFURA_PROJECT_KEY;
@@ -41,10 +41,7 @@ exports.eth_getTransactionByHash = async ({ tx_hash, currency }) => {
           inputData
         );
 
-        const tokenValue = fromWei(
-          new BN(decodedInputData[1]).toString(),
-          "mwei"
-        );
+        const tokenValue = fromWei(decodedInputData[1], "mwei");
         decodedData = {
           to: decodedInputData[0],
           value: tokenValue,
@@ -52,7 +49,7 @@ exports.eth_getTransactionByHash = async ({ tx_hash, currency }) => {
 
         break;
       case "ETH":
-        const etherValue = fromWei(toBN(response.result.value).toString());
+        const etherValue = fromWei(response.result.value, "ether");
 
         decodedData = {
           to: response.result.to,
