@@ -72,7 +72,7 @@ exports.eth_getTransactionByHash = async ({ tx_hash, currency }) => {
         gas: hexToNumber(gas),
         gasPrice: hexToNumber(gasPrice) / 1000000000,
         nonce: hexToNumber(nonce),
-        to: decodedData.to,
+        to: decodedData.to.toLowerCase(),
         value: decodedData.value,
       },
     };
