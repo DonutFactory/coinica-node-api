@@ -25,7 +25,11 @@ exports.deposit = async (req, res) => {
 
     return res
       .status(500)
-      .json({ status: 0, message: "Cannot connect to websocket server" });
+      .json({
+        status: 0,
+        message: "Cannot connect to websocket server",
+        wsServerApi: wsServerApi.readyState,
+      });
   } catch (error) {
     console.log(chalk.red(error));
 
