@@ -13,8 +13,17 @@ const server = http.createServer(app);
 // connect to WebSocket server api
 const wsServerApi = new WebSocket("ws://151.106.113.207:9000/ws");
 
+wsServerApi.on("open", function open() {
+  console.log("WS server connected");
+});
+
 wsServerApi.on("message", function incoming(data) {
-  console.log("incoming data: ", data);
+  console.log("WS server incoming data: ", data);
+});
+
+wsServerApi.on("close", function close() {
+  //TODO: implement reconnection
+  console.log("WS server is disconnected");
 });
 
 app.use(express.json());
