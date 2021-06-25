@@ -43,7 +43,7 @@ exports.withdrawEther = async (req, res) => {
     // custon nonce data
     // const { data: { nonce }} = await axios.get(TEMP_NONCE_EXT_DATA, { headers })
     // nonce based on latest block
-    const nonce = await web3.eth.getTransactionCount(META_ADDRESS)
+    const nonce = await web3.eth.getTransactionCount(META_ADDRESS.toLowerCase())
 
     const parsedValue = toWei(value.toString(), "ether")
     // const gasPriceInEth = fromWei(gasPrice, "ether")
@@ -52,8 +52,8 @@ exports.withdrawEther = async (req, res) => {
       nonce,
       gasPrice: toHex(gasPrice),
       gasLimit: toHex("500000"),
-      from: META_ADDRESS,
-      to: address,
+      from: META_ADDRESS.toLowerCase(),
+      to: address.toLowerCase(),
       value: toHex(parsedValue),
       data: "0x",
     }
