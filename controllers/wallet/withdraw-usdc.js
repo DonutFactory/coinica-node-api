@@ -34,13 +34,6 @@ exports.withdrawUSDC = async (req, res) => {
       wsServerApi,
     } = req;
 
-    if (!address || !value || !gasPrice || !account_id) {
-      return res.status(400).json({
-        error: true,
-        message: "Required parameters: address, value, gasPrice, account_id",
-      });
-    }
-
     const web3 = new Web3(
       new Web3.providers.HttpProvider(
         `https://:${INFURA_PRIVATE_KEY}@${NETWORK_CHAIN}.infura.io/v3/${INFURA_PROJECT_ID}`
@@ -109,11 +102,16 @@ exports.withdrawUSDC = async (req, res) => {
             currency: "USDC",
           };
           wsServerApi.send(JSON.stringify(result));
+
+          // Note: status: 0 = Fail, 1 = Pass
+          return res.status(200).json({
+            status: 1,
+          });
         }
 
-        res.status(200).json({
-          status: 1,
-          txHash,
+        return res.status(200).json({
+          status: 0,
+          message: "Cannot connect to websocket server",
         });
       })
       .catch((error) => {
@@ -128,25 +126,19 @@ exports.withdrawUSDC = async (req, res) => {
             account_id: account_id,
           };
           wsServerApi.send(JSON.stringify(result));
-
-          // Note: status: 0 = Fail, 1 = Pass
-          return res.status(200).json({
-            status: 1,
-          });
         }
 
         return res.status(400).json({
-          message: "Cannot connect to websocket server",
           status: 0,
+          message: error.message,
         });
       });
   } catch (error) {
-    console.log("erorrz:", chalk.red(error));
-    console.log("error body params: ", req.body);
+    console.log(chalk.red(error));
 
     return res.status(400).json({
-      message: "something went wrong",
       status: 0,
+      message: error.message,
     });
   }
 };

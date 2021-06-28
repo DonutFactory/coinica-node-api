@@ -33,13 +33,6 @@ exports.withdrawEther = async (req, res) => {
       wsServerApi,
     } = req;
 
-    if (!address || !value || !gasPrice || !account_id) {
-      return res.status(400).json({
-        error: true,
-        message: "Required parameters: address, value, gasPrice, account_id",
-      });
-    }
-
     const web3 = new Web3(
       new Web3.providers.HttpProvider(
         `https://:${INFURA_PRIVATE_KEY}@${NETWORK_CHAIN}.infura.io/v3/${INFURA_PROJECT_ID}`
@@ -121,14 +114,15 @@ exports.withdrawEther = async (req, res) => {
 
         return res.status(400).json({
           status: 0,
+          message: error.message,
         });
       });
   } catch (error) {
-    console.log("erorrz:", chalk.red(error));
-    console.log("error body params: ", req.body);
+    console.log(chalk.red(error));
 
     return res.status(400).json({
       status: 0,
+      message: error.message,
     });
   }
 };

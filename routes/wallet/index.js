@@ -8,8 +8,8 @@ const validate = require("../../validation/wallet_validation");
 
 router.get("/", (_, res) => res.send("EGS WALLET API"));
 
-router.post("/withdraw-eth", withdrawEther);
-router.post("/withdraw-usdc", withdrawUSDC);
+router.post("/withdraw-eth", validate.withdraw, withdrawEther);
+router.post("/withdraw-usdc", validate.withdraw, withdrawUSDC);
 router.post("/deposit", validate.deposit, deposit);
 
 module.exports = router;

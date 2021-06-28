@@ -20,3 +20,22 @@ exports.deposit = (req, res, next) => {
   }
   next();
 };
+
+const withdrawSchema = Joi.object({
+  address: Joi.string().required(),
+  value: Joi.string().required(),
+  gasPrice: Joi.string().required(),
+  account_id: Joi.string().required(),
+});
+
+exports.withdraw = (req, res, next) => {
+  const { error } = withdrawSchema.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({
+      error: true,
+      message: error,
+    });
+  }
+  next();
+};
