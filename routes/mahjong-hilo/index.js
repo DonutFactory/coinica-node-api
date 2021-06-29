@@ -2,7 +2,7 @@ const { START_GAME, END_GAME, RESET_GAME, PLAY_HILO, DECLARE_KONG, DECLARE_WIN_H
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (_, res) => res.send('EGSNET TREASUREHUNT ROUTES'))
+router.get('/', (_, res) => res.send('EGSNET MAHJONG HI-LO ROUTES'))
 router.post('/get-table', GET_TABLE)
 router.post('/get-balance', GET_BALANCE)
 router.post('/deposit-token', DEPOSIT_TOKEN)

@@ -58,6 +58,7 @@ const multiCurrencyV1 = require("./routes/multi-currency/v1");
 const etherscan = require("./routes/etherscan");
 const wallet = require("./routes/wallet");
 const coincap = require("./routes/coincap");
+const mahjonghilo = require("./routes/mahjong-hilo")
 
 app.use("/", routes);
 app.use("/ghostquest", ghostquest);
@@ -66,6 +67,7 @@ app.use("/multi-currency/v1", multiCurrencyV1);
 app.use("/etherscan", etherscan);
 app.use("/wallet", wallet);
 app.use("/coincap", coincap);
+app.use("/mahjong-hilo", mahjonghilo);
 
 server.listen(port, () => {
   console.log(`Server is started on port ${port}...`);
