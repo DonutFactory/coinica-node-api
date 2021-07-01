@@ -1,11 +1,9 @@
-const { START_GAME, END_GAME, RESET_GAME, PLAY_HILO, DECLARE_KONG, DECLARE_WIN_HAND, DISCARD_TILE , TRANSFER_TOKEN, WITHDRAW_TOKEN, DEPOSIT_TOKEN, GET_BALANCE, GET_TABLE, BET_TOKEN, ADD_BET} = require('../../controllers/mahjong-hilo');
+const { START_GAME, END_GAME, RESET_GAME, PLAY_HILO, DECLARE_KONG, DECLARE_WIN_HAND, DISCARD_TILE , TRANSFER_TOKEN, WITHDRAW_TOKEN, GET_TABLE, BET_TOKEN, ADD_BET} = require('../../controllers/mahjong-hilo');
 const express = require('express');
 const router = express.Router();
 
 router.get('/', (_, res) => res.send('EGSNET MAHJONG HI-LO ROUTES'))
 router.post('/get-table', GET_TABLE)
-router.post('/get-balance', GET_BALANCE)
-router.post('/deposit-token', DEPOSIT_TOKEN)
 router.post('/withdraw-token', WITHDRAW_TOKEN)
 router.post('/transfer-token', TRANSFER_TOKEN)
 router.post('/bet-token', BET_TOKEN)

@@ -44,7 +44,7 @@ Initialize mahjong hi-lo data for user
 
 **ADD_BET**
 ----
-Add's funds to the user's bet pool
+Add's funds to the user's in-game balance
 
 * **URL** <br />
   `/mahjong-hilo/addbet`

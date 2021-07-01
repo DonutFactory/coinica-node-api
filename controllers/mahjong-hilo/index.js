@@ -197,44 +197,6 @@ exports.DECLARE_WIN_HAND = async (req, res) => {
 
   //GET_ALL_USERS_TABLE
 
-  //GET_BALANCE
-  exports.GET_BALANCE = async (req, res) => {
-    const { id } = req.body
-    if (!arrayHasUndefined([id])) {
-      try {
-        const transaction = await takeAction('initialize', GAME_NAME, { id })
-        const { code, responseData } = responseHandler(transaction, 'MJ_ACTION_START_GAME')
-        return res.status(code).json({ ...responseData })
-      } catch (err) {
-        console.log(chalk.red(err))
-        const errorResponse = errorHandler(err)
-        return res.status(errorResponse.code).json({ ...errorResponse })
-      }
-    } else {
-      const errorResponse = errorHandler(null, true, "id")
-      return res.status(errorResponse.code).json({ ...errorResponse })
-    }
-  }
-
-  //DEPOSIT_TOKEN
-  exports.DEPOSIT_TOKEN = async (req, res) => {
-    const { username, amount } = req.body
-    if (!arrayHasUndefined([id])) {
-      try {
-        const transaction = await takeAction('transfer', GAME_NAME, { username, amount })
-        const { code, responseData } = responseHandler(transaction, 'MJ_ACTION_DEPOSIT_TOKEN')
-        return res.status(code).json({ ...responseData })
-      } catch (err) {
-        console.log(chalk.red(err))
-        const errorResponse = errorHandler(err)
-        return res.status(errorResponse.code).json({ ...errorResponse })
-      }
-    } else {
-      const errorResponse = errorHandler(null, true, "username, amount")
-      return res.status(errorResponse.code).json({ ...errorResponse })
-    }
-  }
-
   //WITHDRAW_TOKEN
   exports.WITHDRAW_TOKEN = async (req, res) => {
     const { id } = req.body
