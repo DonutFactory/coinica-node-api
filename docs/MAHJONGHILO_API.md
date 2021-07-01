@@ -206,3 +206,43 @@ Reset the game
 
 <br />
 <br />
+
+**WITHDRAW_TOKEN**
+----
+Withdraw game balance to user's wallet
+
+* **URL** <br />
+  `/mahjong-hilo/withdraw-token`
+
+* **Method:** <br />
+  `POST`
+
+*  **BODY Params** <br />
+    ```text
+	  {
+	    "id" "<USER_GAME_ID>",
+	  }
+   ```
+
+<br />
+<br />
+
+**TRANSFER_TOKEN**
+----
+Transfer stake to game balance
+
+* **URL** <br />
+  `/mahjong-hilo/transfer-token`
+
+* **Method:** <br />
+  `POST`
+
+*  **BODY Params** <br />
+    ```text
+	  {
+	    "id" "<USER_GAME_ID>",
+	  }
+   ```
+
+<br />
+<br />

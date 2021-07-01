@@ -155,6 +155,7 @@ exports.DECLARE_WIN_HAND = async (req, res) => {
     const errorResponse = errorHandler(null, true, "id")
     return res.status(errorResponse.code).json({ ...errorResponse })
   }
+}
 
   //END
   exports.END_GAME = async (req, res) => {
@@ -271,5 +272,5 @@ exports.DECLARE_WIN_HAND = async (req, res) => {
       return res.status(errorResponse.code).json({ ...errorResponse })
     }
   }
-}
+
 
