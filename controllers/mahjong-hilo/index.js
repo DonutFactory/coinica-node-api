@@ -121,6 +121,25 @@ exports.BET_TOKEN = async(req, res) => {
     }
 }
 
+//BET_TOKEN
+exports.ADD_BET = async(req, res) => {
+  const{ id, quantity } = req.body
+    if(!arrayHasUndefined([id])) {
+      try {
+        const transaction = await takeAction('addbet', GAME_NAME, { id, quantity })
+        const { code, responseData } = responseHandler(transaction, 'MJ_ACTION_BET_TOKEN')
+        return res.status(code).json({ ...responseData })
+      } catch (err) {
+        console.log(chalk.red(err))
+        const errorResponse = errorHandler(err)
+        return res.status(errorResponse.code).json({ ...errorResponse })
+      }
+    }else{
+      const errorResponse = errorHandler(null, true, "id")
+      return res.status(errorResponse.code).json({ ...errorResponse })
+    }
+}
+
 //START_GAME
 exports.START_GAME = async(req, res) => {
   const{ id } = req.body
