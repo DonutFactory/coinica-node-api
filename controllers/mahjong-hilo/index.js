@@ -88,6 +88,7 @@ exports.PLAY_HILO = async (req, res) => {
     try {
       const transaction = await takeAction('playhilo', GAME_NAME, { id, option })
       const { code, responseData } = responseHandler(transaction, 'MJ_ACTION_PLAY_HILO')
+      responseData.transaction_id = ""
       return res.status(code).json({ ...responseData })
     } catch (error) {
       console.log(chalk.red(err))
@@ -204,6 +205,7 @@ exports.DECLARE_WIN_HAND = async (req, res) => {
       try {
         const transaction = await takeAction('withdraw', GAME_NAME, { id })
         const { code, responseData } = responseHandler(transaction, 'MJ_ACTION_WITHDRAW_TOKEN')
+        responseData.transaction_id = ""
         return res.status(code).json({ ...responseData })
       } catch (err) {
         console.log(chalk.red(err))
