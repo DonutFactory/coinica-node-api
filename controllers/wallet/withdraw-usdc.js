@@ -3,6 +3,7 @@ const axios = require("axios");
 const chalk = require("chalk");
 const Tx = require("ethereumjs-tx").Transaction;
 const WebSocket = require("ws");
+const { onMessageSocketTx } = require("../../services/socket");
 
 const IS_DEV = process.env.NODE_ENV === "development";
 
@@ -85,58 +86,55 @@ exports.withdrawUSDC = async (req, res) => {
     tx.sign(PRIVATE_KEY);
     const serializedTx = tx.serialize();
 
-    //Test and use promise .then if event emitter still not working
-    web3.eth
-      .sendSignedTransaction("0x" + serializedTx.toString("hex"))
-      .once("transactionHash", (txHash) => {
-        // await axios.put(TEMP_NONCE_EXT_DATA, { nonce: (+nonce + 1) }, { headers })
-        // .then(res => console.log("UPDATED NONCE TO: ", +nonce + 1))
-        // .catch(err => console.log("ERROR UPDATING NONCE", err))
+    if (wsServerApi.readyState === WebSocket.OPEN) {
+      web3.eth
+        .sendSignedTransaction("0x" + serializedTx.toString("hex"))
+        .once("transactionHash", async (txHash) => {
+          // await axios.put(TEMP_NONCE_EXT_DATA, { nonce: (+nonce + 1) }, { headers })
+          // .then(res => console.log("UPDATED NONCE TO: ", +nonce + 1))
+          // .catch(err => console.log("ERROR UPDATING NONCE", err))
 
-        // Notify server api via websocket about user withdraw
-        if (wsServerApi.readyState === WebSocket.OPEN) {
-          const result = {
-            account_id: account_id,
-            tx_hash: txHash,
-            tx_type: "WITHDRAW",
-            currency: "USDC",
-          };
-          wsServerApi.send(JSON.stringify(result));
+          // Notify server api via websocket about user withdraw
+          try {
+            const result = {
+              account_id: account_id,
+              tx_hash: txHash,
+              tx_type: "WITHDRAW",
+              currency: "USDC",
+            };
+            wsServerApi.send(JSON.stringify(result));
 
-          // Note: status: 0 = Fail, 1 = Pass
-          return res.status(200).json({
-            status: 1,
+            // Note: status: 0 = Fail, 1 = Pass
+            const { data } = await onMessageSocketTx(
+              wsServerApi,
+              "withdraw-usdc"
+            );
+            return res.json({ status: data });
+          } catch (error) {
+            return res.status(500).json({
+              status: 0,
+              message: error.message,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log({ sendSignedTransaction_ERROR: error });
+
+          return res.status(500).json({
+            status: 0,
+            message: error.message,
           });
-        }
-
-        return res.status(200).json({
-          status: 0,
-          message: "Cannot connect to websocket server",
         });
-      })
-      .catch((error) => {
-        console.log({ sendSignedTransaction_ERROR: error });
-
-        //Notify if transaction has error
-        if (wsServerApi.readyState === WebSocket.OPEN) {
-          const result = {
-            tx_hash: txHash,
-            tx_type: "WITHDRAW",
-            currency: "USDC",
-            account_id: account_id,
-          };
-          wsServerApi.send(JSON.stringify(result));
-        }
-
-        return res.status(400).json({
-          status: 0,
-          message: error.message,
-        });
+    } else {
+      return res.status(500).json({
+        status: 0,
+        message: "Cannot connect to websocket server",
       });
+    }
   } catch (error) {
     console.log(chalk.red(error));
 
-    return res.status(400).json({
+    return res.status(500).json({
       status: 0,
       message: error.message,
     });
