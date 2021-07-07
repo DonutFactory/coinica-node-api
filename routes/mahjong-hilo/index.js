@@ -1,4 +1,4 @@
-const { START_GAME, END_GAME, RESET_GAME, PLAY_HILO, DECLARE_KONG, DECLARE_WIN_HAND, DISCARD_TILE , TRANSFER_TOKEN, WITHDRAW_TOKEN, GET_TABLE, BET_TOKEN, ADD_BET} = require('../../controllers/mahjong-hilo');
+const { START_GAME, END_GAME, RESET_GAME, PLAY_HILO, DECLARE_KONG, DECLARE_WIN_HAND, DISCARD_TILE , TRANSFER_TOKEN, WITHDRAW_TOKEN, GET_TABLE, BET_TOKEN, ADD_BET, RESET_BET} = require('../../controllers/mahjong-hilo');
 const express = require('express');
 const router = express.Router();
 
@@ -15,6 +15,7 @@ router.post('/play-hilo', PLAY_HILO)
 router.post('/discard-tile', DISCARD_TILE)
 router.post('/declare-kong', DECLARE_KONG)
 router.post('/declare-win-hand', DECLARE_WIN_HAND)
+router.post('/reset-bet', RESET_BET)
 
 
 module.exports = router

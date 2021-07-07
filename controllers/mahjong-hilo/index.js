@@ -43,7 +43,7 @@ exports.START_GAME = async (req, res) => {
   }
 }
 
-//BET_TOKEN
+//ADD_BET
 exports.ADD_BET = async (req, res) => {
   const { id, quantity } = req.body
   if (!arrayHasUndefined([id])) {
@@ -81,6 +81,25 @@ exports.BET_TOKEN = async (req, res) => {
   }
 }
 
+//RESET_BET
+exports.RESET_BET = async (req, res) => {
+  const { id } = req.body
+  if (!arrayHasUndefined([id])) {
+    try {
+      const transaction = await takeAction('resetbet', GAME_NAME, { id })
+      const { code, responseData } = responseHandler(transaction, 'MJ_ACTION_RESET_BET')
+      return res.status(code).json({ ...responseData })
+    } catch (err) {
+      console.log(chalk.red(err))
+      const errorResponse = errorHandler(err)
+      return res.status(errorResponse.code).json({ ...errorResponse })
+    }
+  } else {
+    const errorResponse = errorHandler(null, true, "id")
+    return res.status(errorResponse.code).json({ ...errorResponse })
+  }
+}
+
 //PLAY_HILO
 exports.PLAY_HILO = async (req, res) => {
   const { id, option } = req.body
@@ -88,7 +107,6 @@ exports.PLAY_HILO = async (req, res) => {
     try {
       const transaction = await takeAction('playhilo', GAME_NAME, { id, option })
       const { code, responseData } = responseHandler(transaction, 'MJ_ACTION_PLAY_HILO')
-      responseData.transaction_id = ""
       return res.status(code).json({ ...responseData })
     } catch (error) {
       console.log(chalk.red(err))
@@ -205,7 +223,6 @@ exports.DECLARE_WIN_HAND = async (req, res) => {
       try {
         const transaction = await takeAction('withdraw', GAME_NAME, { id })
         const { code, responseData } = responseHandler(transaction, 'MJ_ACTION_WITHDRAW_TOKEN')
-        responseData.transaction_id = ""
         return res.status(code).json({ ...responseData })
       } catch (err) {
         console.log(chalk.red(err))
