@@ -1,4 +1,5 @@
 const { Api, JsonRpc } = require('eosjs');
+const chalk = require('chalk');
 const { JsSignatureProvider } = require('eosjs/dist/eosjs-jssig');      // development only
 const fetch = require('node-fetch');                                    // node only; not needed in browsers
 const { TextEncoder, TextDecoder } = require('util');                   // node only; native TextEncoder/Decoder
@@ -82,11 +83,14 @@ exports.takeAction = async (action, game = null, data) => {
       expireSeconds: 30,
     });
 
+    console.log(chalk.green('ACTION RESULT: '), result)
+
     return {
       ...result,
       isError: false
     };
   } catch (error) {
+    console.log(chalk.red('ACTION ERROR: '), error.message)
     return {
       ...error,
       isError: true

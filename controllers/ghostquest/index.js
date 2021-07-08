@@ -86,22 +86,22 @@ exports.GET_TABLE_ROWS = async(req, res) => {
 }
 
 exports.GEN_CHAR = async(req, res) => {
-  const { username, amount, battleLimit } = req.body
-  if (!arrayHasUndefined([username, amount, battleLimit])) {
+  const { id, quantity, limit } = req.body
+  if (!arrayHasUndefined([id, quantity, limit])) {
     try {
       const transaction = await api.transact({
         actions: [{
           account: 'eosio.token',
           name: 'transfer',
           authorization: [{
-            actor: username,
+            actor: id,
             permission: 'active',
           }],
           data: {
-            from: username,
+            from: id,
             to: 'ghostquest',
-            quantity: `${amount}.0000 EOS`,
-            memo: `BTTL_LMT=${battleLimit}`
+            quantity: `${quantity}.0000 EOS`,
+            memo: `BTTL_LMT=${limit}`
           }
         }]
       }, {
@@ -132,7 +132,7 @@ exports.GEN_CHAR = async(req, res) => {
       code: 400,
       error: true,
       data: null,
-      message: 'Parameters required: username, amount, battleLimit'
+      message: 'Parameters required: id, quantity, limit'
     })
   }
 };
