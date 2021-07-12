@@ -4,6 +4,7 @@ const ws = require("ws");
 const http = require("http");
 const cors = require("cors");
 const reconnectWs = require("reconnecting-websocket");
+const { allowedOrigins } = require("./config");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -42,7 +43,11 @@ app.use(
 );
 
 //enable cors
-app.use(cors());
+app.use(
+  cors({
+    origin: allowedOrigins(),
+  })
+);
 app.options("*", cors());
 
 app.use((req, res, next) => {
@@ -58,7 +63,7 @@ const multiCurrencyV1 = require("./routes/multi-currency/v1");
 const etherscan = require("./routes/etherscan");
 const wallet = require("./routes/wallet");
 const coincap = require("./routes/coincap");
-const mahjonghilo = require("./routes/mahjong-hilo")
+const mahjonghilo = require("./routes/mahjong-hilo");
 
 app.use("/", routes);
 app.use("/ghostquest", ghostquest);
