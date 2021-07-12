@@ -17,6 +17,46 @@ const signatureProvider = new JsSignatureProvider([EOS_PRIVATE_KEY]);
 const rpc = new JsonRpc(eosServer, { fetch })
 const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() });
 
+exports.queryTableData = async (game = null, options = {}) => {
+  let contractName = "";
+
+  try {
+    if ((game + "").toLowerCase() === 'treasurehunt') {
+      contractName = EOS_TH_CONTRACT_NAME;
+    } else if ((game + "").toLowerCase() === 'ghostquest') {
+      contractName = EOS_GQ_CONTRACT_NAME
+    } else if ((game + "").toLowerCase() === 'mahjonghilo') {
+      contractName = EOS_MJ_CONTRACT_NAME
+    } else {
+      throw new Error("invalid game")
+    }
+  
+    const table = await rpc.get_table_rows({
+      ...options,
+      json: true,
+      code: contractName,
+      scope: contractName,
+      table: 'users',
+    });
+
+    console.log({ table_query: {
+      json: true,
+      code: contractName,
+      scope: contractName,
+      table: 'users',
+      ...options,
+    } })
+
+    if (table && table.rows.length > 0) {
+      return table.rows
+    } else {
+      return []
+    }
+  } catch (error) {
+    return []
+  }
+}
+
 exports.getTableData = async (game = null, id) => {
   let contractName = "";
 

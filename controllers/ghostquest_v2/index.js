@@ -1,9 +1,27 @@
 const chalk = require('chalk');
 const arrayHasUndefined = require('../../helpers/arrayHasUndefined');
-const { takeAction, getTableData } = require('../../services/smartcontract_api');
+const { takeAction, getTableData, queryTableData } = require('../../services/smartcontract_api');
 const { responseHandler, errorHandler } = require("./responseHandler");
 
 const GAME_NAME = process.env.EOS_GQ_CONTRACT_NAME;
+
+exports.GQ_ACTION_TABLE_QUERY = async(req, res) => {
+  const { options } = req.body
+  if (!arrayHasUndefined([options])) {
+    try {
+      const transaction = await queryTableData(GAME_NAME, options)
+      const { code, responseData } = responseHandler(transaction, 'GQ_ACTION_TABLE_QUERY')
+      return res.status(code).json({ ...responseData })
+    } catch (err) {
+      console.log(chalk.red(err))
+      const errorResponse = errorHandler(err)
+      return res.status(errorResponse.code).json({ ...errorResponse })
+    }
+  } else {
+    const errorResponse = errorHandler(null, true, "options")
+    return res.status(errorResponse.code).json({ ...errorResponse })
+  }
+};
 
 exports.GQ_ACTION_GET_USER_DATA = async(req, res) => {
   const { id } = req.body

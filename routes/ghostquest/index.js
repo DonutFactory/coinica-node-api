@@ -7,6 +7,7 @@
 // } = require('../../controllers/ghostquest');
 const {
   GQ_ACTION_GET_USER_DATA,
+  GQ_ACTION_TABLE_QUERY,
   GQ_ACTION_INITIALIZE_GAME,
   GQ_ACTION_SUMMON_GHOST,
   GQ_ACTION_ADD_LIFE,
@@ -25,6 +26,7 @@ router.get('/', (_, res) => res.send('EGSNET GHOSTQUEST ROUTES'))
 // router.post('/battle_result', BATTLE_RESULT)
 
 router.post('/get_table', GQ_ACTION_GET_USER_DATA)
+router.post('/query_table', GQ_ACTION_TABLE_QUERY)
 router.post('/initialize', GQ_ACTION_INITIALIZE_GAME)
 router.post('/summon_ghost', GQ_ACTION_SUMMON_GHOST)
 router.post('/add_life', GQ_ACTION_ADD_LIFE)
