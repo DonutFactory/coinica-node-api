@@ -74,7 +74,7 @@ exports.withdrawUSDC = async (req, res) => {
     const rawTx = {
       nonce,
       gasPrice: toHex(gasPrice),
-      gasLimit: toHex("500000"),
+      gasLimit: toHex("100000"),
       from: META_ADDRESS.toLowerCase(),
       to: ROPSTEN_USDC_ADDRESS.toLowerCase(),
       data: encodedAbi,
