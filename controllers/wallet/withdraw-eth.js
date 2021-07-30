@@ -56,7 +56,7 @@ exports.withdrawEther = async (req, res) => {
     const rawTx = {
       nonce,
       gasPrice: toHex(gasPrice),
-      gasLimit: toHex("21000"),
+      gasLimit: toHex("500000"),
       from: META_ADDRESS.toLowerCase(),
       to: address.toLowerCase(),
       value: toHex(parsedValue),
