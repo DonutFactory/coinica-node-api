@@ -8,6 +8,6 @@ exports.allowedOrigins = (origin) => {
     /127.0.0.1:[0-9]{1,4}/,
     /localhost:[0-9]{1,4}/,
     /coinica.net/,
-    /api.coinica.net(:[0-9]{1,4})?\/s1/ //port become optional
+    /api.coinica.net(:[0-9]{1,4})?(\/s1)?/ //port become optional
   ];
 };
