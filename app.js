@@ -18,7 +18,7 @@ const options = {
   connectionTimeout: 1000,
 };
 const wsServerApi = new reconnectWs(
-  `ws://${process.env.SCALA_HOST_SERVER_API}:${process.env.SCALA_PORT_SERVER_API}/ws`,
+  process.env.SCALA_WEB_SOCKET_URL,
   [],
   options
 );
