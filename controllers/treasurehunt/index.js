@@ -7,7 +7,6 @@ exports.TH_ACTION_GET_USER_DATA = async(req, res) => {
   const { id } = req.body
   if (!arrayHasUndefined([id])) {
     try {
-      console.log('TH_ACTION_GET_USER_DATA!!!!!!!!!!!!!!!!!!!!!!')
       const transaction = await getTableData(id)
       const { code, responseData } = responseHandler(transaction, 'TH_ACTION_GET_USER_DATA')
       return res.status(code).json({ ...responseData })
