@@ -14,7 +14,7 @@ const {
   GQ_ACTION_ELIMINATE_GHOST,
   GQ_ACTION_WITHDRAW_GHOST,
   GQ_ACTION_BATTLE_RESULT,
-} = require('../../controllers/ghostquest_v2');
+} = require('../../controllers/ghostquest_mainnet');
 const express = require('express');
 const router = express.Router();
 

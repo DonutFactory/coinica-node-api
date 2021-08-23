@@ -7,7 +7,7 @@ const {
   TH_ACTION_REMOVE_EXISTING_GAME,
   TH_ACTION_OPEN_TILE,
   TH_ACTION_AUTOPLAY_OPT,
-} = require('../../controllers/treasurehunt');
+} = require('../../controllers/treasurehunt_testnet');
 
 router.get('/', (_, res) => res.send('EGSNET TREASUREHUNT ROUTES'))
 router.post('/get_data', TH_ACTION_GET_USER_DATA)
