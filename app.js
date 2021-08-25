@@ -76,9 +76,9 @@ if (IS_MAINNET) {
   app.use("/ghostquest", ghostquest_mainnet);
   app.use("/treasurehunt", treasurehunt_mainnet);
 } else {
-  const ghostquest = require("./routes/ghostquest_testnet");
+  const ghostquest_testnet = require("./routes/ghostquest_testnet");
   const treasurehunt_testnet = require("./routes/treasurehunt_testnet");
-  app.use("/ghostquest", ghostquest);
+  app.use("/ghostquest", ghostquest_testnet);
   app.use("/treasurehunt", treasurehunt_testnet);
 }
 
