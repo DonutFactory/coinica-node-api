@@ -32,7 +32,7 @@ exports.withdrawEther = async (req, res) => {
     const from = META_ADDRESS.toLowerCase();
     const nonce = await web3.eth.getTransactionCount(from);
     const parsedValue = toHex(toWei(value.toString(), "ether"));
-    const maxPriorityFeePerGas = toHex(toWei("1", "gwei"));
+    const maxPriorityFeePerGas = toHex(toWei("1", "gwei")); // metamask endpoint suggestedGasFee: https://gas-api.metaswap.codefi.network/networks/<chain_id>/suggestedGasFees
     const txType = toHex(2); // transaction type that support property maxFeePerGas and maxPriorityFeePerGas
 
     const paramsTx = {
