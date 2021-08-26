@@ -40,7 +40,7 @@ exports.withdrawEther = async (req, res) => {
       to,
       from,
       value: parsedValue,
-      gas: toHex("21000"),
+      gasLimit: toHex("21000"),
       data: "0x",
       type: txType,
       maxPriorityFeePerGas,
