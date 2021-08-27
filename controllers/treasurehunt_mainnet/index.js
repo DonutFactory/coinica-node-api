@@ -1,13 +1,15 @@
 const chalk = require('chalk');
 const arrayHasUndefined = require('../../helpers/arrayHasUndefined');
-const { takeAction, getTableData } = require('../../services/th_smartcontract');
+const { takeAction, getTableData } = require('../../services/main_smartcontract');
 const { responseHandler, errorHandler } = require("./responseHandler");
+
+const GAME_NAME = process.env.EOS_TH_CONTRACT_NAME;
 
 exports.TH_ACTION_GET_USER_DATA = async(req, res) => {
   const { id } = req.body
   if (!arrayHasUndefined([id])) {
     try {
-      const transaction = await getTableData(id)
+      const transaction = await getTableData(GAME_NAME, id)
       const { code, responseData } = responseHandler(transaction, 'TH_ACTION_GET_USER_DATA')
       return res.status(code).json({ ...responseData })
     } catch (err) {
