@@ -12,4 +12,4 @@ exports.allowedOrigins = (origin) => {
   ];
 };
 
-exports.IS_MAINNET = true
+exports.IS_MAINNET = false;
