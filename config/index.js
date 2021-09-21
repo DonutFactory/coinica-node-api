@@ -11,5 +11,3 @@ exports.allowedOrigins = (origin) => {
     /api.coinica.net(:[0-9]{1,4})?(\/s1)?/ //port and path become optional
   ];
 };
-
-exports.IS_MAINNET = false;

@@ -5,16 +5,16 @@ const fetch = require('node-fetch');                                    // node 
 const { TextEncoder, TextDecoder } = require('util');                   // node only; native TextEncoder/Decoder
 
 // PRIVATE NETWORK
-// const EOS_PRIVATE_KEY = process.env.EOS_PRIVATE_KEY || "";
-// const EOS_SERVER_PROTOCOL = process.env.EOS_PROTOCOL || "http";
-// const EOS_SERVER_HOST = process.env.EOS_HOST;
-// const EOS_SERVER_PORT = process.env.EOS_PORT;
+const EOS_PRIVATE_KEY = process.env.EOS_PRIVATE_KEY || "";
+const EOS_SERVER_PROTOCOL = process.env.EOS_PROTOCOL || "http";
+const EOS_SERVER_HOST = process.env.EOS_HOST;
+const EOS_SERVER_PORT = process.env.EOS_PORT;
 
 // MAIN NETWORK
-const EOS_PRIVATE_KEY = process.env.MAIN_EOS_PRIVATE_KEY || "";
-const EOS_SERVER_PROTOCOL = process.env.MAIN_EOS_PROTOCOL || "http";
-const EOS_SERVER_HOST = process.env.MAIN_EOS_HOST;
-const EOS_SERVER_PORT = process.env.MAIN_EOS_PORT;
+// const EOS_PRIVATE_KEY = process.env.MAIN_EOS_PRIVATE_KEY || "";
+// const EOS_SERVER_PROTOCOL = process.env.MAIN_EOS_PROTOCOL || "http";
+// const EOS_SERVER_HOST = process.env.MAIN_EOS_HOST;
+// const EOS_SERVER_PORT = process.env.MAIN_EOS_PORT;
 
 // smartcontract tables
 const MAIN_EOS_CONTRACT_NAME = process.env.MAIN_EOS_CONTRACT_NAME || "";

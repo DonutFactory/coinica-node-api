@@ -4,7 +4,7 @@ const ws = require("ws");
 const http = require("http");
 const cors = require("cors");
 const reconnectWs = require("reconnecting-websocket");
-const { allowedOrigins, IS_MAINNET } = require("./config");
+const { allowedOrigins } = require("./config");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -62,6 +62,8 @@ const etherscan = require("./routes/etherscan");
 const wallet = require("./routes/wallet");
 const coincap = require("./routes/coincap");
 const mahjonghilo = require("./routes/mahjong-hilo");
+const ghostquest = require("./routes/ghostquest");
+const treasurehunt = require("./routes/treasurehunt");
 
 app.use("/", routes);
 app.use("/multi-currency/v1", multiCurrencyV1);
@@ -69,18 +71,8 @@ app.use("/etherscan", etherscan);
 app.use("/wallet", wallet);
 app.use("/coincap", coincap);
 app.use("/mahjong-hilo", mahjonghilo);
-
-if (IS_MAINNET) {
-  const ghostquest_mainnet = require("./routes/ghostquest_mainnet");
-  const treasurehunt_mainnet = require("./routes/treasurehunt_mainnet");
-  app.use("/ghostquest", ghostquest_mainnet);
-  app.use("/treasurehunt", treasurehunt_mainnet);
-} else {
-  const ghostquest_testnet = require("./routes/ghostquest_testnet");
-  const treasurehunt_testnet = require("./routes/treasurehunt_testnet");
-  app.use("/ghostquest", ghostquest_testnet);
-  app.use("/treasurehunt", treasurehunt_testnet);
-}
+app.use("/ghostquest", ghostquest);
+app.use("/treasurehunt", treasurehunt);
 
 server.listen(port, () => {
   console.log(`Server is started on port ${port}...`);
