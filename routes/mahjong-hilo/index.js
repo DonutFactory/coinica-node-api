@@ -13,7 +13,8 @@ const {
   GET_TABLE,
   BET_TOKEN,
   ADD_BET,
-  RESET_BET
+  RESET_BET,
+  RIICHI_DISCARD
 } = require('../../controllers/mahjong-hilo');
 
 router.get('/', (_, res) => res.send('EGSNET MAHJONG HI-LO ROUTES'))
@@ -30,6 +31,7 @@ router.post('/discard-tile', DISCARD_TILE)
 router.post('/declare-kong', DECLARE_KONG)
 router.post('/declare-win-hand', DECLARE_WIN_HAND)
 router.post('/reset-bet', RESET_BET)
+router.post('/riichi-discard', RIICHI_DISCARD)
 
 
 module.exports = router

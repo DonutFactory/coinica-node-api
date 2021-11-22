@@ -251,5 +251,23 @@ exports.DECLARE_WIN_HAND = async (req, res) => {
       return res.status(errorResponse.code).json({ ...errorResponse })
     }
   }
+  //TRANSFER_TOKEN
+  exports.RIICHI_DISCARD = async (req, res) => {
+    const { id } = req.body
+    if (!arrayHasUndefined([id])) {
+      try {
+        const transaction = await takeAction('mhlrchidscrd', { id })
+        const { code, responseData } = responseHandler(transaction, 'MJ_ACTION_RIICHI_DISCARD')
+        return res.status(code).json({ ...responseData })
+      } catch (err) {
+        console.log(chalk.red(err))
+        const errorResponse = errorHandler(err)
+        return res.status(errorResponse.code).json({ ...errorResponse })
+      }
+    } else {
+      const errorResponse = errorHandler(null, true, "id")
+      return res.status(errorResponse.code).json({ ...errorResponse })
+    }
+  }
 
 
